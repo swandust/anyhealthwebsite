@@ -163,22 +163,7 @@ export default function Header({
                   </button>
                 ))}
 
-                <div className="pt-3 border-t border-black/10 flex flex-col gap-3 px-3">
-                  <a
-                    href="mailto:contact@anyhealth.asia"
-                    className="text-left text-sm text-black/70 hover:text-black transition-colors"
-                  >
-                    Contact
-                  </a>
-                  <a
-                    href="https://calendly.com/anyhealth-sg/30min"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-2 bg-[var(--ah-primary)] hover:opacity-90 text-white text-sm font-medium rounded-full transition-colors w-fit"
-                  >
-                    Request demo
-                  </a>
-                </div>
+                
               </div>
             </div>
           )}
