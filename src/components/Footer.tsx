@@ -30,7 +30,7 @@ export default function Footer() {
               </a>
               {/* LinkedIn */}
               <a
-                href="https://www.linkedin.com/in/anyhealth-global-21a1a7388/"
+                href="https://www.linkedin.com/company/anyhealthglobal/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
