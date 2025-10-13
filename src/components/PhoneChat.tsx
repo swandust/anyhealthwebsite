@@ -342,7 +342,7 @@ export default function PhoneChat() {
           </ul>
           <div className="flex justify-center mt-6">
             <a
-              href="#"
+              href="https://wa.me/60173693890?text=Hi"
               className="px-8 py-4 bg-[#4F997F] w-[60%] text-center hover:opacity-90 text-white font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
               Book a GP Appointment

@@ -1,5 +1,5 @@
 // src/components/HomePage.tsx
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   Users,
   Stethoscope,
@@ -8,26 +8,26 @@ import {
   ArrowRight,
   Brain,
   Building2,
-} from "lucide-react"
+} from "lucide-react";
 
-import logo2 from "../assets/3.svg"
-import gpImg from "../assets/GP2.svg" // ensure this exists or remove img usage
-import PhoneChat from "./PhoneChat"
-import WorkflowSection from "./WorkflowSection"
-// ❌ import who from "./ServicesPage"  // removed: this import doesn't exist and breaks build
+import logo2 from "../assets/3.svg";
+import gpImg from "../assets/GP2.svg"; // remove if you don't have this asset
+import PhoneChat from "./PhoneChat";
+import WorkflowSection from "./WorkflowSection";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface HomePageProps {
-  onNavigate: (page: string) => void
+  onNavigate: (page: string) => void;
 }
 
 type Zone = {
-  id: "gp" | "specialist" | "hospital"
-  title: string
-  subtitle: string
-  icon: React.ReactNode
-  gradient: string
-  benefits: string
-}
+  id: "gp" | "specialist" | "hospital";
+  title: string;
+  subtitle: string;
+  icon: React.ReactNode;
+  gradient: string;
+  benefits: string;
+};
 
 const zones: Zone[] = [
   {
@@ -57,16 +57,32 @@ const zones: Zone[] = [
     benefits:
       "Coordinate ER referrals, monitor inpatients, and manage outpatient follow-up with shared context.",
   },
-]
+];
 
 const stats = [
-  { icon: <Users className="w-6 h-6 md:w-8 md:h-8" />, value: "Join Now", label: "Active Users" },
-  { icon: <Stethoscope className="w-6 h-6 md:w-8 md:h-8" />, value: "Expanding", label: "Healthcare Providers" },
-  { icon: <Clock className="w-6 h-6 md:w-8 md:h-8" />, value: "24/7", label: "Support Available" },
-  { icon: <Award className="w-6 h-6 md:w-8 md:h-8" />, value: "99.9%", label: "Uptime Guarantee" },
-]
+  {
+    icon: <Users className="w-6 h-6 md:w-8 md:h-8" />,
+    value: "Join Now",
+    label: "Active Users",
+  },
+  {
+    icon: <Stethoscope className="w-6 h-6 md:w-8 md:h-8" />,
+    value: "Expanding",
+    label: "Healthcare Providers",
+  },
+  {
+    icon: <Clock className="w-6 h-6 md:w-8 md:h-8" />,
+    value: "24/7",
+    label: "Support Available",
+  },
+  {
+    icon: <Award className="w-6 h-6 md:w-8 md:h-8" />,
+    value: "99.9%",
+    label: "Uptime Guarantee",
+  },
+];
 
-// panel content
+// modal copy
 const contentById = {
   gp: {
     headline: "Smart daily ops for GP clinics",
@@ -104,11 +120,11 @@ const contentById = {
       "Staff assignment & shift visibility",
     ],
   },
-} as const
+} as const;
 
 export default function HomePage({ onNavigate }: HomePageProps) {
-  const [showChoice, setShowChoice] = useState(false)
-  const [openZone, setOpenZone] = useState<Zone | null>(null)
+  const [showChoice, setShowChoice] = useState(false);
+  const [openZone, setOpenZone] = useState<Zone | null>(null);
 
   return (
     <div className="bg-white">
@@ -141,44 +157,99 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               </p>
             </div>
 
-            {/* CTAs */}
-            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-              <div className="relative">
-                <button
-                  onClick={() => setShowChoice((prev) => !prev)}
-                  className="px-6 py-3 sm:px-8 sm:py-4 bg-[#4F997F] hover:opacity-90 text-white font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  I am a...
-                </button>
-                {showChoice && (
-                  <div className="absolute mt-2 left-1/2 -translate-x-1/2 bg-white border rounded-xl shadow-lg w-44 sm:w-56 z-20">
-                    <button
-                      onClick={() => {
-                        setShowChoice(false)
-                        onNavigate("solutions") // Patient → PhoneChat demo
-                      }}
-                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-t-xl text-sm sm:text-base"
+            {/* CTAs — split-in-place, no popup */}
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+              <motion.div
+                layout
+                className="inline-flex"
+                transition={{ duration: 0.18, ease: "easeOut" }}
+              >
+                <AnimatePresence initial={false} mode="wait">
+                  {!showChoice ? (
+                    // single button (closed)
+                    <motion.button
+                      key="closed"
+                      layout
+                      onClick={() => setShowChoice(true)}
+                      className="
+                        inline-flex items-center justify-center
+                        px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold
+                        border border-[#4F997F] text-[#0b3a2f]
+                        transition-all duration-200
+                        hover:bg-[#4F997F] hover:text-white
+                        focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2
+                        shadow-sm hover:shadow-md
+                      "
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
                     >
-                      I’m a Patient
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowChoice(false)
-                        onNavigate("who") // Provider zones below
-                      }}
-                      className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-b-xl text-sm sm:text-base"
+                      I am a…
+                    </motion.button>
+                  ) : (
+                    // split buttons (open)
+                    <motion.div
+                      key="open"
+                      layout
+                      className="
+                        inline-flex items-stretch rounded-full overflow-hidden
+                        ring-1 ring-[#4F997F] shadow-sm bg-white
+                      "
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
                     >
-                      I’m a Provider
-                    </button>
-                  </div>
-                )}
-              </div>
+                      {/* Patient */}
+                      <button
+                        onClick={() => {
+                          setShowChoice(false);
+                          setTimeout(() => onNavigate("solutions"), 120);
+                        }}
+                        className="
+                          px-5 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold
+                          bg-[#4F997F] text-white hover:opacity-90 transition-colors
+                        "
+                      >
+                        Patient
+                        <span className="ml-2 hidden sm:inline text-white/90 font-normal">
+                          · book clinic appointments
+                        </span>
+                      </button>
 
+                      <div className="w-px bg-emerald-300/60" />
+
+                      {/* Provider */}
+                      <button
+                        onClick={() => {
+                          setShowChoice(false);
+                          setTimeout(() => onNavigate("who"), 120);
+                        }}
+                        className="
+                          px-5 sm:px-6 py-3 sm:py-4 text-sm sm:text-base font-semibold
+                          bg-white text-[#0b3a2f] hover:bg-emerald-50 transition-colors
+                        "
+                      >
+                        Provider
+                        <span className="ml-2 hidden sm:inline text-emerald-900/80 font-normal">
+                          · doctors, nurses, hospitals
+                        </span>
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+
+              {/* Request Demo (kept inline; same visual weight) */}
               <a
                 href="https://calendly.com/anyhealth-sg/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 sm:px-8 sm:py-4 border border-gray-300 text-gray-900 hover:bg-gray-50 font-semibold rounded-full transition-all duration-300 text-sm sm:text-base"
+                className="
+                  inline-flex items-center justify-center
+                  px-6 py-3 sm:px-8 sm:py-4 rounded-full text-sm sm:text-base font-semibold
+                  border border-gray-300 text-gray-900 hover:bg-gray-50
+                  transition-all duration-200
+                "
               >
                 Request Demo
               </a>
@@ -192,8 +263,12 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center mx-auto mb-3 md:mb-4 bg-[#4F997F14] text-[#4F997F]">
                   {stat.icon}
                 </div>
-                <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-gray-600 text-sm md:text-base">{stat.label}</div>
+                <div className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
+                  {stat.value}
+                </div>
+                <div className="text-gray-600 text-sm md:text-base">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -212,7 +287,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
       <section id="solutions" className="scroll-mt-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Patients (Phone demo) */}
+          {/* Patients demo */}
           <div className="rounded-3xl bg-gradient-to-r from-slate-50 to-teal-50 ring-1 ring-emerald-200/60 shadow-xl p-6 sm:p-8 md:p-10">
             <div className="text-center mb-6 sm:mb-8">
               <h3 className="text-2xl sm:text-3xl font-semibold">For Patients</h3>
@@ -223,7 +298,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             <PhoneChat />
           </div>
 
-          {/* Providers (Zones grid) — 3 in one row */}
+          {/* Providers (three across on desktop) */}
           <div
             id="who"
             className="pt-8 sm:pt-10 mt-10 sm:mt-14 mb-20 sm:mb-28 rounded-3xl bg-white ring-1 ring-gray-200/70 shadow-xl p-5 sm:p-6 md:p-10"
@@ -256,9 +331,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                     {zone.icon}
                   </div>
                   <div className="relative z-10">
-                    <h4 className="text-xl md:text-2xl font-bold text-gray-900 mb-1.5 md:mb-2">{zone.title}</h4>
-                    <p className="text-gray-700 text-sm sm:text-base mb-3 md:mb-4">{zone.subtitle}</p>
-                    <p className="text-gray-500 text-xs sm:text-sm mb-4 md:mb-6">{zone.benefits}</p>
+                    <h4 className="text-xl md:text-2xl font-bold text-gray-900 mb-1.5 md:mb-2">
+                      {zone.title}
+                    </h4>
+                    <p className="text-gray-700 text-sm sm:text-base mb-3 md:mb-4">
+                      {zone.subtitle}
+                    </p>
+                    <p className="text-gray-500 text-xs sm:text-sm mb-4 md:mb-6">
+                      {zone.benefits}
+                    </p>
                     <span className="inline-flex items-center text-emerald-700 font-semibold gap-2
                                      group-hover:gap-3 transition-all duration-300 text-sm md:text-base">
                       Explore Zone
@@ -279,7 +360,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </div>
           </div>
 
-          {/* Modal (panel) */}
+          {/* Modal for zones */}
           {openZone && (
             <div
               role="dialog"
@@ -287,14 +368,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4"
               onKeyDown={(e) => e.key === "Escape" && setOpenZone(null)}
             >
-              {/* Backdrop */}
+              {/* backdrop */}
               <div
                 className="absolute inset-0 bg-black/50"
                 onClick={() => setOpenZone(null)}
               />
-              {/* Panel */}
+
+              {/* panel */}
               <div className="relative z-10 w-full max-w-[92vw] sm:max-w-2xl md:max-w-4xl rounded-2xl md:rounded-3xl bg-white shadow-2xl ring-1 ring-black/5 overflow-hidden">
-                {/* Header */}
+                {/* header */}
                 <div className="flex items-center gap-3 p-3 sm:p-4 border-b">
                   <button
                     className="shrink-0 rounded-full border px-3 py-1.5 text-sm hover:bg-gray-50"
@@ -310,16 +392,24 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       <span className="sr-only">{openZone.title}</span>
                     </div>
                     <div>
-                      <div className="text-sm md:text-base font-semibold text-gray-900">{openZone.title}</div>
-                      <div className="text-[11px] md:text-xs text-gray-500">{openZone.subtitle}</div>
+                      <div className="text-sm md:text-base font-semibold text-gray-900">
+                        {openZone.title}
+                      </div>
+                      <div className="text-[11px] md:text-xs text-gray-500">
+                        {openZone.subtitle}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Scrollable body */}
+                {/* scrollable body */}
                 <div className="max-h-[85vh] overflow-y-auto">
-                  <div className={`grid gap-0 ${openZone.id === "gp" ? "md:grid-cols-2" : "md:grid-cols-1"}`}>
-                    {/* Media column — only for GP */}
+                  <div
+                    className={`grid gap-0 ${
+                      openZone.id === "gp" ? "md:grid-cols-2" : "md:grid-cols-1"
+                    }`}
+                  >
+                    {/* media — only for GP */}
                     {openZone.id === "gp" && (
                       <div className="p-4 md:p-6 border-b md:border-b-0 md:border-r">
                         <div className="w-full rounded-2xl bg-white border flex items-center justify-center p-3 sm:p-4">
@@ -332,14 +422,16 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       </div>
                     )}
 
-                    {/* Content area */}
+                    {/* content */}
                     <div className="p-4 sm:p-5 md:p-6">
                       {openZone.id === "gp" && (
                         <>
                           <h5 className="text-base md:text-lg font-semibold text-gray-900">
                             {contentById.gp.headline}
                           </h5>
-                          <p className="mt-2 text-sm text-gray-600">{contentById.gp.blurb}</p>
+                          <p className="mt-2 text-sm text-gray-600">
+                            {contentById.gp.blurb}
+                          </p>
 
                           <h6 className="mt-5 md:mt-6 text-sm font-semibold text-gray-900">
                             {contentById.gp.featuresTitle}
@@ -440,5 +532,5 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
     </div>
-  )
+  );
 }
