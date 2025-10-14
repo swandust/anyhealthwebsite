@@ -7,7 +7,7 @@ import ServicesPage from "./components/ServicesPage";
 import AboutPage from "./components/AboutPage";
 import ContactPage from "./components/ContactPage";
 
-const HEADER_OFFSET = 72;
+const HEADER_OFFSET = 0;
 const isBrowser = typeof window !== "undefined";
 
 function getPath(): "/about" | "/providers" | "/" {
@@ -68,12 +68,19 @@ function App() {
   // Auto-scroll on initial load if URL has a hash (e.g. /#contact)
   useEffect(() => {
     if (!isBrowser) return;
+    // Prevent restoring previous scroll position
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
     const hash = window.location.hash.replace("#", "");
     if (hash) {
       setTimeout(() => {
         scrollToId(hash);
         setCurrentPage(hash);
       }, 50); // wait until DOM is ready
+      } else {
+      // No hash → force top-of-page
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
   }, []);
 
