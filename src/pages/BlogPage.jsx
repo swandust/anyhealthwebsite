@@ -28,6 +28,10 @@ function BlogCard({ post, index }) {
   }, [])
 
   return (
+    <Link
+      to={`/blog/${post.id}`}
+      style={{ textDecoration: 'none', display: 'block' }}
+    >
     <div
       ref={cardRef}
       onMouseEnter={() => setHovered(true)}
@@ -113,6 +117,7 @@ function BlogCard({ post, index }) {
         </div>
       </div>
     </div>
+    </Link>
   )
 }
 
@@ -237,6 +242,7 @@ function FeaturedCard({ post }) {
   }, [])
 
   return (
+    <Link to={`/blog/${post.id}`} style={{ textDecoration: 'none', display: 'block' }}>
     <div
       ref={cardRef}
       onMouseEnter={() => setHovered(true)}
@@ -287,6 +293,7 @@ function FeaturedCard({ post }) {
         </div>
       </div>
     </div>
+    </Link>
   )
 }
 
