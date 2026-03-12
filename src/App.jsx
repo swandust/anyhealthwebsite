@@ -7,6 +7,7 @@ import Services from './components/Services'
 import ClinicFeatures from './components/ClinicFeatures'
 import MediRescue from './components/MediRescue'
 import Analytics from './components/Analytics'
+import Ecosystem from './components/Ecosystem'
 import Pricing from './components/Pricing'
 import About from './components/About'
 import CtaBanner from './components/CtaBanner'
@@ -77,6 +78,7 @@ function HomePage() {
         <div id="features" className="snap-section"><ClinicFeatures /></div>
         <div id="medirescue" className="snap-section"><MediRescue /></div>
         <div id="analytics" className="snap-section"><Analytics /></div>
+        <div id="ecosystem" className="snap-section"><Ecosystem /></div>
         <div id="pricing" className="snap-section"><Pricing /></div>
         <div id="about" className="snap-section"><About /></div>
         <div className="snap-section"><CtaBanner /></div>
