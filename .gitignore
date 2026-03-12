@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.claude/
+temporary screenshots/
+screenshot.mjs
+serve.mjs
+anyhealth.asia_providers.png
+payard.png
+CLAUDE.md
