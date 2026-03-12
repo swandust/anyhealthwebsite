@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
 import crewApp from '/brand assets/19.png'
 import whatsappBooking from '/brand assets/20.png'
@@ -17,6 +18,20 @@ export default function AmbulancePage() {
   }, [])
 
   return (
+    <>
+    <Helmet>
+      <title>MediRescue — 30-Second Ambulance Dispatch with Live GPS Tracking | AnyHealth</title>
+      <meta name="description" content="MediRescue dispatches ambulances in under 30 seconds. Patients book via WhatsApp, crews get the job on a mobile app with live GPS routing, and admins monitor every trip in real time." />
+      <link rel="canonical" href="https://anyhealth.asia/ambulance" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://anyhealth.asia/ambulance" />
+      <meta property="og:title" content="MediRescue — 30-Second Ambulance Dispatch with Live GPS | AnyHealth" />
+      <meta property="og:description" content="Full-stack ambulance system: WhatsApp booking, crew mobile app, live GPS, and real-time ETA monitoring." />
+      <meta property="og:image" content="https://anyhealth.asia/brand%20assets/Anyhealth%20logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="MediRescue — 30-Second Ambulance Dispatch | AnyHealth" />
+      <meta name="twitter:description" content="Full-stack ambulance system: WhatsApp booking, crew mobile app, live GPS, and real-time ETA monitoring." />
+    </Helmet>
     <div style={{ background:'#0a0a0a', minHeight:'100vh', fontFamily:"'Inter',sans-serif" }}>
       {/* Mini nav */}
       <nav style={{ position:'fixed',top:0,left:0,right:0,zIndex:50,background:'rgba(10,10,10,0.95)',backdropFilter:'blur(14px)',padding:'1rem 2rem',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
@@ -192,5 +207,6 @@ export default function AmbulancePage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

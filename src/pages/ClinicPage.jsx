@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
 import whatsappBot from '/brand assets/17.png'
 import dashboard from '/brand assets/18.png'
@@ -16,6 +17,20 @@ export default function ClinicPage() {
   }, [])
 
   return (
+    <>
+    <Helmet>
+      <title>Clinic Suite — 24/7 WhatsApp Booking, Reminders & Dashboard | AnyHealth</title>
+      <meta name="description" content="AnyHealth's Clinic Suite puts your GP or TCM clinic on WhatsApp. Automate bookings, send appointment reminders, reduce no-shows by 15%, and manage patient records — all in one dashboard." />
+      <link rel="canonical" href="https://anyhealth.asia/clinic" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://anyhealth.asia/clinic" />
+      <meta property="og:title" content="Clinic Suite — 24/7 WhatsApp Booking & Automation | AnyHealth" />
+      <meta property="og:description" content="Put your clinic on WhatsApp. Automate bookings, cut no-shows by 15%, and save 2+ hours of admin daily." />
+      <meta property="og:image" content="https://anyhealth.asia/brand%20assets/Anyhealth%20logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Clinic Suite — 24/7 WhatsApp Booking & Automation | AnyHealth" />
+      <meta name="twitter:description" content="Put your clinic on WhatsApp. Automate bookings, cut no-shows by 15%, and save 2+ hours of admin daily." />
+    </Helmet>
     <div style={{ background: '#F0F5F2', minHeight: '100vh', fontFamily: "'Inter',sans-serif" }}>
 
       {/* Floating nav */}
@@ -197,5 +212,6 @@ export default function ClinicPage() {
       </section>
 
     </div>
+    </>
   )
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
 
 const ADMIN_PASSWORD = 'anyhealth2026'
@@ -374,10 +375,17 @@ export default function AdminPage() {
   const deletePost = (id) => setPosts(prev => prev.filter(p => p.id !== id))
   const togglePublish = (id) => setPosts(prev => prev.map(p => p.id === id ? { ...p, published: !p.published } : p))
 
-  if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />
+  const noindexHelmet = (
+    <Helmet>
+      <title>Admin | AnyHealth</title>
+      <meta name="robots" content="noindex, nofollow" />
+    </Helmet>
+  )
 
-  if (editing === 'new') return <PostEditor post={null} onSave={savePost} onCancel={() => setEditing(null)} />
-  if (editing) return <PostEditor post={editing} onSave={savePost} onCancel={() => setEditing(null)} />
+  if (!authed) return <>{noindexHelmet}<LoginScreen onLogin={() => setAuthed(true)} /></>
 
-  return <PostsList posts={posts} onNew={() => setEditing('new')} onEdit={setEditing} onDelete={deletePost} onTogglePublish={togglePublish} onLogout={logout} />
+  if (editing === 'new') return <>{noindexHelmet}<PostEditor post={null} onSave={savePost} onCancel={() => setEditing(null)} /></>
+  if (editing) return <>{noindexHelmet}<PostEditor post={editing} onSave={savePost} onCancel={() => setEditing(null)} /></>
+
+  return <>{noindexHelmet}<PostsList posts={posts} onNew={() => setEditing('new')} onEdit={setEditing} onDelete={deletePost} onTogglePublish={togglePublish} onLogout={logout} /></>
 }

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Services from './components/Services'
@@ -32,8 +33,43 @@ function HomePage() {
     return () => io.disconnect()
   }, [])
 
+  const orgSchema = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AnyHealth",
+    "url": "https://anyhealth.asia",
+    "logo": "https://anyhealth.asia/brand%20assets/3.png",
+    "email": "contact@anyhealth.asia",
+    "description": "WhatsApp-native clinic automation and ambulance dispatch platform for Southeast Asia.",
+    "areaServed": ["MY", "SG"],
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "MY",
+      "addressRegion": "Selangor"
+    },
+    "sameAs": [
+      "https://www.instagram.com/anyhealthglobal/",
+      "https://www.facebook.com/profile.php?id=61582629562230"
+    ]
+  })
+
   return (
     <>
+      <Helmet>
+        <title>AnyHealth — WhatsApp-Native Clinic & Ambulance Automation | Southeast Asia</title>
+        <meta name="description" content="AnyHealth automates clinic bookings, reminders, and ambulance dispatch via WhatsApp — no app downloads needed. Serving GPs, TCM clinics, and emergency services across Malaysia and Singapore." />
+        <link rel="canonical" href="https://anyhealth.asia/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://anyhealth.asia/" />
+        <meta property="og:title" content="AnyHealth — WhatsApp-Native Clinic & Ambulance Automation" />
+        <meta property="og:description" content="Automate clinic bookings, cut no-shows by 15%, and dispatch ambulances in 30 seconds — all through WhatsApp." />
+        <meta property="og:image" content="https://anyhealth.asia/brand%20assets/Anyhealth%20logo.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="AnyHealth — WhatsApp-Native Clinic & Ambulance Automation" />
+        <meta name="twitter:description" content="Automate clinic bookings, cut no-shows by 15%, and dispatch ambulances in 30 seconds — all through WhatsApp." />
+        <meta name="twitter:image" content="https://anyhealth.asia/brand%20assets/Anyhealth%20logo.png" />
+        <script type="application/ld+json">{orgSchema}</script>
+      </Helmet>
       <Navbar />
       <main className="snap-main">
         <div id="hero" className="snap-section"><Hero /></div>

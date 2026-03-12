@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
 
 const STORAGE_KEY = 'anyhealth_blog_posts'
@@ -35,7 +36,45 @@ export default function BlogPostPage() {
     )
   }
 
+  const postUrl = `https://anyhealth.asia/blog/${post.id}`
+  const blogSchema = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.excerpt,
+    "datePublished": post.date,
+    "author": {
+      "@type": "Organization",
+      "name": "AnyHealth",
+      "url": "https://anyhealth.asia"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "AnyHealth",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://anyhealth.asia/brand%20assets/Anyhealth%20logo.png"
+      }
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": postUrl }
+  })
+
   return (
+    <>
+    <Helmet>
+      <title>{post.title} | AnyHealth Blog</title>
+      <meta name="description" content={post.excerpt} />
+      <link rel="canonical" href={postUrl} />
+      <meta property="og:type" content="article" />
+      <meta property="og:url" content={postUrl} />
+      <meta property="og:title" content={`${post.title} | AnyHealth Blog`} />
+      <meta property="og:description" content={post.excerpt} />
+      <meta property="og:image" content="https://anyhealth.asia/brand%20assets/Anyhealth%20logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={`${post.title} | AnyHealth Blog`} />
+      <meta name="twitter:description" content={post.excerpt} />
+      <script type="application/ld+json">{blogSchema}</script>
+    </Helmet>
     <div style={{ background: '#0a0a0a', minHeight: '100vh', fontFamily: "'Inter',sans-serif" }}>
       {/* Nav */}
       <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: 'rgba(10,10,10,0.95)', backdropFilter: 'blur(14px)', padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -99,5 +138,6 @@ export default function BlogPostPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
 
 const STORAGE_KEY = 'anyhealth_blog_posts'
@@ -133,6 +134,20 @@ export default function BlogPage() {
   }, [])
 
   return (
+    <>
+    <Helmet>
+      <title>Blog — Healthcare Automation & Emergency Tech | AnyHealth</title>
+      <meta name="description" content="Insights on clinic automation, WhatsApp-native healthcare, ambulance dispatch tech, and building a health-tech startup from NTU to Southeast Asia." />
+      <link rel="canonical" href="https://anyhealth.asia/blog" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://anyhealth.asia/blog" />
+      <meta property="og:title" content="Blog — Healthcare Automation & Emergency Tech | AnyHealth" />
+      <meta property="og:description" content="Insights on clinic automation, WhatsApp-native healthcare, and building health-tech in Southeast Asia." />
+      <meta property="og:image" content="https://anyhealth.asia/brand%20assets/Anyhealth%20logo.png" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Blog — Healthcare Automation & Emergency Tech | AnyHealth" />
+      <meta name="twitter:description" content="Insights on clinic automation, WhatsApp-native healthcare, and building health-tech in Southeast Asia." />
+    </Helmet>
     <div style={{ background:'#0a0a0a', minHeight:'100vh', fontFamily:"'Inter',sans-serif" }}>
       {/* Nav */}
       <nav style={{ position:'fixed',top:0,left:0,right:0,zIndex:50,background:'rgba(10,10,10,0.95)',backdropFilter:'blur(14px)',padding:'1rem 2rem',display:'flex',alignItems:'center',justifyContent:'space-between',borderBottom:'1px solid rgba(255,255,255,0.06)' }}>
@@ -225,6 +240,7 @@ export default function BlogPage() {
         <NewsletterSection />
       </section>
     </div>
+    </>
   )
 }
 
