@@ -2,15 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
-
-const STORAGE_KEY = 'anyhealth_blog_posts'
-
-function getAdminPosts() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-    return stored.filter(p => p.published)
-  } catch { return [] }
-}
+import { loadPosts } from '../lib/posts'
 
 
 function BlogCard({ post, index }) {
@@ -125,11 +117,11 @@ function BlogCard({ post, index }) {
 export default function BlogPage() {
   const [headerVisible, setHeaderVisible] = useState(false)
   const headerRef = useRef(null)
-  const [allPosts, setAllPosts] = useState(getAdminPosts)
+  const [allPosts, setAllPosts] = useState([])
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    setAllPosts(getAdminPosts())
+    loadPosts().then(posts => setAllPosts(posts.filter(p => p.published)))
     requestAnimationFrame(() => setTimeout(() => setHeaderVisible(true), 100))
   }, [])
 

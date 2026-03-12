@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
+import { loadPosts, savePost as dbSavePost, removePost as dbRemovePost } from '../lib/posts'
 
 const ADMIN_PASSWORD = 'anyhealth2026'
-const STORAGE_KEY = 'anyhealth_blog_posts'
 
 const GRADIENTS = [
   { label: 'Teal Forest', value: 'linear-gradient(135deg,#0D1B4B,#2D5A3D)' },
@@ -23,18 +23,6 @@ const ACCENT_COLORS = [
   { label: 'Gold', value: '#FCD34D' },
   { label: 'Cyan', value: '#22D3EE' },
 ]
-
-function getStoredPosts() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-function savePosts(posts) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts))
-}
 
 function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
@@ -357,14 +345,18 @@ function PostRow({ post, onEdit, onDelete, onTogglePublish, isLast }) {
 // ── Main export ────────────────────────────────────────────
 export default function AdminPage() {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('ah_admin') === '1')
-  const [posts, setPosts] = useState(getStoredPosts)
+  const [posts, setPosts] = useState([])
+  const [dbLoading, setDbLoading] = useState(true)
   const [editing, setEditing] = useState(null) // null = list, 'new' = new post, post object = edit
 
-  useEffect(() => { savePosts(posts) }, [posts])
+  useEffect(() => {
+    loadPosts().then(p => { setPosts(p); setDbLoading(false) })
+  }, [])
 
   const logout = () => { sessionStorage.removeItem('ah_admin'); setAuthed(false) }
 
-  const savePost = (post) => {
+  const savePost = async (post) => {
+    await dbSavePost(post)
     setPosts(prev => {
       const exists = prev.find(p => p.id === post.id)
       return exists ? prev.map(p => p.id === post.id ? post : p) : [post, ...prev]
@@ -372,8 +364,18 @@ export default function AdminPage() {
     setEditing(null)
   }
 
-  const deletePost = (id) => setPosts(prev => prev.filter(p => p.id !== id))
-  const togglePublish = (id) => setPosts(prev => prev.map(p => p.id === id ? { ...p, published: !p.published } : p))
+  const deletePost = async (id) => {
+    await dbRemovePost(id)
+    setPosts(prev => prev.filter(p => p.id !== id))
+  }
+
+  const togglePublish = async (id) => {
+    const post = posts.find(p => p.id === id)
+    if (!post) return
+    const updated = { ...post, published: !post.published }
+    await dbSavePost(updated)
+    setPosts(prev => prev.map(p => p.id === id ? updated : p))
+  }
 
   const noindexHelmet = (
     <Helmet>
@@ -386,6 +388,14 @@ export default function AdminPage() {
 
   if (editing === 'new') return <>{noindexHelmet}<PostEditor post={null} onSave={savePost} onCancel={() => setEditing(null)} /></>
   if (editing) return <>{noindexHelmet}<PostEditor post={editing} onSave={savePost} onCancel={() => setEditing(null)} /></>
+
+  if (dbLoading) return (
+    <>{noindexHelmet}
+      <div style={{ minHeight: '100vh', background: '#0a0a0a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'rgba(255,255,255,0.3)', fontFamily: "'Inter',sans-serif", fontSize: '0.9rem' }}>Loading posts…</div>
+      </div>
+    </>
+  )
 
   return <>{noindexHelmet}<PostsList posts={posts} onNew={() => setEditing('new')} onEdit={setEditing} onDelete={deletePost} onTogglePublish={togglePublish} onLogout={logout} /></>
 }

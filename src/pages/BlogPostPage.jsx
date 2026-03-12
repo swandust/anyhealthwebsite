@@ -1,28 +1,21 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import logo from '/brand assets/3.png'
-
-const STORAGE_KEY = 'anyhealth_blog_posts'
-
-function getPost(id) {
-  try {
-    const posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-    return posts.find(p => String(p.id) === String(id) && p.published) || null
-  } catch { return null }
-}
+import { loadPosts } from '../lib/posts'
 
 export default function BlogPostPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const [post, setPost] = useState(null)
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    const p = getPost(id)
-    setPost(p)
-    setLoaded(true)
+    loadPosts().then(posts => {
+      const p = posts.find(p => String(p.id) === String(id) && p.published) || null
+      setPost(p)
+      setLoaded(true)
+    })
   }, [id])
 
   if (!loaded) return null

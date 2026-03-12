@@ -7,3 +7,5 @@ serve.mjs
 anyhealth.asia_providers.png
 payard.png
 CLAUDE.md
+.env
+.env.local
