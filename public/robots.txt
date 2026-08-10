@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# AI assistants & crawlers welcome — see /llms.txt for a structured summary
+Sitemap: https://anyhealth.asia/sitemap.xml

@@ -1,0 +1,42 @@
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-navy focus:px-5 focus:py-2 focus:text-white">Skip to content</a>
+<header id="site-header" class="fixed inset-x-0 top-0 z-[80]">
+  <div class="container-site">
+    <nav class="flex h-16 items-center justify-between gap-4 sm:h-20" aria-label="Main">
+      <a href="/" class="flex shrink-0 items-center gap-2.5" aria-label="AnyHealth.Ai home">
+        <img src="/assets/icon-512.png" alt="" class="h-9 w-9 sm:h-11 sm:w-11" width="44" height="44" />
+        <span class="text-[1.35rem] font-extrabold leading-none tracking-tight sm:text-2xl">
+          <span class="text-sage-600">Any</span><span class="text-navy-900">Health.Ai</span>
+        </span>
+      </a>
+      <div class="hidden items-center gap-1 lg:flex">
+        <a data-nav href="/" class="nav-link">Home</a>
+        <a href="/#platform" class="nav-link">Platform</a>
+        <a href="/#verticals" class="nav-link">Who it’s for</a>
+        <a data-nav href="/about" class="nav-link">About</a>
+        <a data-nav href="/blog" class="nav-link">Blog</a>
+        <a data-nav href="/contact" class="nav-link">Contact</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://any-health-scheduler.vercel.app/" target="_blank" rel="noopener" data-track="cta_book_demo_nav"
+           class="hidden rounded-full bg-navy px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-navy/20 transition hover:bg-navy-800 sm:inline-flex">
+          Book a demo
+        </a>
+        <button id="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle menu"
+                class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-navy-100 bg-white text-navy lg:hidden">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+  <div id="mobile-nav" class="hidden border-t border-navy-100 bg-white/95 shadow-xl backdrop-blur-xl lg:hidden">
+    <div class="container-site flex flex-col gap-1 py-4">
+      <a data-nav href="/" class="nav-link py-3 text-base">Home</a>
+      <a href="/#platform" class="nav-link py-3 text-base">Platform</a>
+      <a href="/#verticals" class="nav-link py-3 text-base">Who it’s for</a>
+      <a data-nav href="/about" class="nav-link py-3 text-base">About</a>
+      <a data-nav href="/blog" class="nav-link py-3 text-base">Blog</a>
+      <a data-nav href="/contact" class="nav-link py-3 text-base">Contact</a>
+      <a href="https://any-health-scheduler.vercel.app/" target="_blank" rel="noopener" data-track="cta_book_demo_nav" class="btn-primary mt-3">Book a demo</a>
+    </div>
+  </div>
+</header>
