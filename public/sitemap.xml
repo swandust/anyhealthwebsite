@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://anyhealth.asia/</loc><lastmod>2026-07-05</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://anyhealth.asia/</loc><lastmod>2026-09-19</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://anyhealth.asia/about</loc><lastmod>2026-07-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://anyhealth.asia/contact</loc><lastmod>2026-07-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://anyhealth.asia/blog</loc><lastmod>2026-07-05</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://anyhealth.asia/blog</loc><lastmod>2026-09-19</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://anyhealth.asia/blog/healthcare-ai-2026-chatbots-to-ai-agents</loc><lastmod>2026-09-19</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://anyhealth.asia/blog/can-healthcare-ai-be-trusted</loc><lastmod>2026-09-19</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://anyhealth.asia/blog/ai-for-clinics-what-practices-need</loc><lastmod>2026-09-19</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://anyhealth.asia/blog/whatsapp-chatbot-for-clinics-and-hospitals</loc><lastmod>2026-07-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://anyhealth.asia/blog/reduce-no-shows-appointment-reminders</loc><lastmod>2026-07-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://anyhealth.asia/blog/ai-for-multi-branch-clinic-chains</loc><lastmod>2026-08-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
