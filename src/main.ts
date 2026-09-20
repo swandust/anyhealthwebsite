@@ -112,6 +112,74 @@ if (form) {
 const year = document.getElementById('year');
 if (year) year.textContent = String(new Date().getFullYear());
 
+/* ---------- Scroll-scrub cinematic section (home only) ---------- */
+function initScrub(): void {
+  const section = document.querySelector<HTMLElement>('[data-scrub]');
+  if (!section) return;
+  const track = section.querySelector<HTMLElement>('.scrub-track');
+  const video = section.querySelector<HTMLVideoElement>('[data-scrub-video]');
+  const a = section.querySelector<HTMLElement>('[data-stage="a"]');
+  const b = section.querySelector<HTMLElement>('[data-stage="b"]');
+  const c = section.querySelector<HTMLElement>('[data-stage="c"]');
+  if (!track || !video || !a || !b || !c) return;
+
+  // Reduced motion: don't pin/scrub — loop the clip and stack the copy.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    section.classList.add('scrub-off');
+    video.loop = true;
+    video.play().catch(() => {});
+    return;
+  }
+
+  let duration = 10;
+  video.addEventListener('loadedmetadata', () => {
+    duration = video.duration || 10;
+    try {
+      video.currentTime = 0.001;
+    } catch {
+      /* ignore */
+    }
+  });
+  // Prime the element so browsers allow frame-accurate seeking without playback.
+  video.play().then(() => video.pause()).catch(() => {});
+
+  const ramp = (p: number, lo: number, hi: number) =>
+    p <= lo ? 0 : p >= hi ? 1 : (p - lo) / (hi - lo);
+
+  let curT = -1;
+
+  const applyStages = (p: number) => {
+    const oa = 1 - ramp(p, 0.26, 0.4);
+    const ob = ramp(p, 0.38, 0.5) * (1 - ramp(p, 0.56, 0.66));
+    const oc = ramp(p, 0.66, 0.8);
+    a.style.opacity = oa.toFixed(3);
+    b.style.opacity = ob.toFixed(3);
+    c.style.opacity = oc.toFixed(3);
+    a.style.pointerEvents = oa > 0.5 ? 'auto' : 'none';
+    c.style.pointerEvents = oc > 0.5 ? 'auto' : 'none';
+  };
+
+  const onScroll = () => {
+    const total = track.offsetHeight - window.innerHeight;
+    const p = total > 0 ? Math.min(1, Math.max(0, -track.getBoundingClientRect().top / total)) : 0;
+    applyStages(p);
+    const t = p * duration;
+    if (video.readyState >= 1 && Math.abs(t - curT) > 0.03) {
+      curT = t;
+      try {
+        video.currentTime = t;
+      } catch {
+        /* ignore */
+      }
+    }
+  };
+
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+}
+initScrub();
+
 /* ---------- Hero (home page only) ---------- */
 initHero();
 

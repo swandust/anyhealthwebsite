@@ -227,34 +227,55 @@
       </div>
     </section>
 
-    <!-- ============ 24/7 BOOKING ============ -->
-    <section id="booking" class="scroll-mt-24 bg-gradient-to-b from-navy-50/60 to-white py-20 sm:py-28">
-      <div class="container-site grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-        <div class="reveal">
-          <span class="eyebrow">24/7 medical appointment booking</span>
-          <h2 class="h2-section">Your front desk sleeps.<br /><span class="text-sage-600">Your bookings don’t.</span></h2>
-          <p class="mt-5 text-lg leading-relaxed text-navy-700">
-            62% of patients message outside office hours. AnyHealth answers instantly at 11 PM, on Sunday, on public holidays - qualifying real intent and turning interest into confirmed appointments while competitors send patients to voicemail.
-          </p>
-          <ul class="mt-8 space-y-4">
-            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Books, confirms and reschedules</strong> - patients pick doctor, branch, time and visit type in one chat.</p></li>
-            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">A single voice message is enough</strong> - patients speak, the AI books. Perfect for elderly patients.</p></li>
-            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Targets only interested patients</strong> - smart reminders and recovery campaigns reach the people who actually want care, cutting no-shows from 28% to 10%.</p></li>
-            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Insurance interpreter</strong> - tells patients what their policy covers at your clinic before they book.</p></li>
-          </ul>
-          <div class="mt-9">
+    <!-- ============ SCROLL-SCRUB: day to night ============ -->
+    <section id="booking" class="scroll-mt-24 bg-black text-white" data-scrub aria-label="24/7 booking, from day to night">
+      <div class="scrub-track relative">
+        <div class="scrub-stage flex items-center overflow-hidden">
+          <!-- scroll-driven video -->
+          <video data-scrub-video class="scrub-video pointer-events-none absolute inset-0 h-full w-full object-contain"
+                 muted playsinline preload="auto" poster="/assets/frontdesk-scroll-poster.webp" aria-hidden="true">
+            <source src="/assets/frontdesk-scroll.mp4" type="video/mp4" />
+          </video>
+          <!-- edge fades so the black eases into neighbouring white sections -->
+          <div class="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-black to-transparent"></div>
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-black to-transparent"></div>
+
+          <!-- STAGE A: daytime features (text on the right, phone is on the left) -->
+          <div data-stage="a" class="scrub-panel absolute inset-0 z-20 flex items-center justify-center px-5 sm:justify-end sm:px-10 lg:px-16">
+            <div class="w-full max-w-md rounded-3xl bg-black/45 p-6 backdrop-blur-sm sm:max-w-lg sm:rounded-none sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <span class="eyebrow-dark">Daytime · your clinic is open</span>
+              <h3 class="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">Everything your front desk does, in one chat.</h3>
+              <ul class="mt-6 space-y-3.5">
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">Books, confirms and reschedules</strong> - patients pick doctor, branch, time and visit type in one chat.</p></li>
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">A single voice message is enough</strong> - patients speak, the AI books. Perfect for elderly patients.</p></li>
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">Targets only interested patients</strong> - smart reminders and recovery campaigns cut no-shows from 28% to 10%.</p></li>
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">Insurance interpreter</strong> - tells patients what their policy covers at your clinic before they book.</p></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- STAGE B: the flip headline (centre) -->
+          <div data-stage="b" class="scrub-panel pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-6 text-center opacity-0">
+            <h2 class="text-4xl font-extrabold leading-[1.04] tracking-tight drop-shadow-lg sm:text-6xl lg:text-7xl">Your front desk sleeps.<br /><span class="text-sage-300">Your bookings don’t.</span></h2>
+          </div>
+
+          <!-- STAGE C: night-time (text on the left, phone is on the right) -->
+          <div data-stage="c" class="scrub-panel absolute inset-0 z-20 flex items-center justify-center px-5 opacity-0 sm:justify-start sm:px-10 lg:px-16">
+            <div class="w-full max-w-md rounded-3xl bg-black/45 p-6 backdrop-blur-sm sm:max-w-lg sm:rounded-none sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <span class="eyebrow-dark">11 PM · Sunday · public holiday</span>
+              <h3 class="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">While the competition sends patients to voicemail.</h3>
+              <p class="mt-5 text-base leading-relaxed text-navy-100 sm:text-lg">62% of patients message outside office hours. AnyHealth answers instantly, shares its location to find the nearest branch, and turns real intent into confirmed appointments - all night, every night.</p>
+            </div>
+          </div>
+
+          <!-- persistent demo CTA -->
+          <div class="absolute inset-x-0 bottom-7 z-30 flex flex-col items-center gap-2 px-6 text-center sm:bottom-9">
             <a href="https://wa.me/601145292025?text=Hi" target="_blank" rel="noopener" data-track="cta_try_demo"
-               class="inline-flex items-center gap-2.5 rounded-full bg-wa px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-wa/30 transition hover:brightness-95 focus:outline-none focus:ring-4 focus:ring-wa/30 active:scale-[.98]">
+               class="inline-flex items-center gap-2.5 rounded-full bg-wa px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-wa/40 transition hover:brightness-95 focus:outline-none focus:ring-4 focus:ring-wa/30 active:scale-[.98]">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.01c-.25.7-1.44 1.34-1.99 1.42-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.62-2.96-1.28-4.9-4.26-5.05-4.46-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37h.56c.18.01.42-.07.66.5.25.59.84 2.04.91 2.19.07.15.12.32.02.52-.35.7-.72.67-.44 1.13.63 1.03 1.63 1.72 2.37 2.03.3.13.47.12.65-.07.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.71.81 2.01.96.3.15.5.22.57.35.07.12.07.72-.18 1.42z"/></svg>
               Try the demo version
             </a>
-            <p class="mt-3 text-sm text-navy-600">Send “Hi” and select your desired demo. We'll approve you within an hour!</p>
-          </div>
-        </div>
-        <div class="reveal">
-          <div class="mx-auto grid max-w-2xl grid-cols-2 items-center gap-2 sm:gap-4">
-            <img src="/assets/frontdesk1.webp" alt="AnyHealth WhatsApp AI turning a patient voice message into an accurate clinic booking, with a full appointment summary" class="w-full drop-shadow-2xl" width="1200" height="1500" loading="lazy" />
-            <img src="/assets/frontdesk2.webp" alt="AnyHealth WhatsApp assistant sharing health check-up packages and prices and finding the nearest clinic branch by location" class="w-full drop-shadow-2xl" width="1200" height="1500" loading="lazy" />
+            <p class="text-xs font-medium text-white/60">Send “Hi” and pick your demo. We’ll approve you within an hour.</p>
           </div>
         </div>
       </div>
@@ -479,20 +500,19 @@
     <!-- ============ SAFETY ============ -->
     <section class="bg-white py-20 sm:py-28">
       <div class="container-site grid items-center gap-14 lg:grid-cols-2">
-        <figure class="reveal mx-auto grid max-w-lg grid-cols-2 items-start gap-5">
-          <img src="/assets/chat-location.webp" alt="AnyHealth location finder on WhatsApp: patient shares location and the bot suggests the nearest clinic branch with distance and address" class="w-full overflow-hidden rounded-3xl border-4 border-white shadow-2xl shadow-navy-200" width="568" height="1229" loading="lazy" />
-          <img src="/assets/chat-guarded.webp" alt="Guarded healthcare conversational AI: the AnyHealth bot declines to give mental-health medical advice and safely offers to book a professional instead" class="mt-10 w-full overflow-hidden rounded-3xl border-4 border-white shadow-2xl shadow-navy-200" width="568" height="1229" loading="lazy" />
+        <figure class="reveal mx-auto max-w-md lg:max-w-xl">
+          <img src="/assets/safety-qa.webp" alt="AnyHealth on WhatsApp answering health check-up package questions with real prices, and sharing location to guide the patient to the nearest clinic branch" class="w-full drop-shadow-2xl" width="1200" height="1500" loading="lazy" />
         </figure>
         <div class="reveal">
-          <span class="eyebrow">Guarded context · Safe by design</span>
-          <h2 class="h2-section">Powerful with patients.<br /><span class="text-sage-600">Careful with medicine.</span></h2>
+          <span class="eyebrow">Intelligent · location-aware</span>
+          <h2 class="h2-section">Understands the question.<br /><span class="text-sage-600">Knows where to send it.</span></h2>
           <p class="mt-5 text-lg leading-relaxed text-navy-700">
-            Healthcare conversational AI has to know its limits. AnyHealth’s guarded context never gives medical advice it shouldn’t, redirects distress to professionals, and hands over to your human team the moment it matters.
+            Patients rarely ask in tidy sentences. They say “premium how much?”, “cheaper option?”, “what’s included?” - and AnyHealth works out what they actually mean, answers from your clinic’s real prices and packages, then points them to the right branch by location.
           </p>
           <ul class="mt-8 space-y-4">
-            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Location-aware, branch-aware</strong> - answers “which clinic is nearest?” and branch-specific questions accurately.</p></li>
-            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Refuses out-of-scope advice</strong> - clinical questions route to clinicians, not to guesses.</p></li>
-            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Human escalation built in</strong> - urgent symptoms and unhappy patients reach your staff immediately.</p></li>
+            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Answers intent, not just keywords</strong> - loose, everyday questions get accurate replies drawn from your own services, prices and policies.</p></li>
+            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Routes by location</strong> - patients share their location and AnyHealth guides them to the nearest branch, with distance and contact ready to book.</p></li>
+            <li class="flex gap-4"><span class="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-navy-700"><strong class="text-navy-900">Knows where to stop</strong> - clinical questions are handed to your clinicians rather than guessed at, and anything urgent reaches a human straight away.</p></li>
           </ul>
         </div>
       </div>

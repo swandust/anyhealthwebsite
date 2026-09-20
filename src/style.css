@@ -241,6 +241,52 @@
   }
 }
 
+/* ---------- Scroll-scrub cinematic section ---------- */
+.scrub-track {
+  height: 360vh;
+}
+@media (max-width: 640px) {
+  .scrub-track {
+    height: 300vh;
+  }
+}
+.scrub-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+}
+.scrub-panel {
+  transition: opacity 0.4s ease;
+  will-change: opacity;
+}
+/* Fallback when scrubbing is disabled (reduced motion) */
+.scrub-off .scrub-track {
+  height: auto;
+}
+.scrub-off .scrub-stage {
+  position: static;
+  height: auto;
+  min-height: auto;
+  display: block;
+  padding-block: 4rem;
+}
+.scrub-off .scrub-video {
+  position: static;
+  height: auto;
+  max-height: 60vh;
+}
+.scrub-off [data-stage='b'] {
+  display: none;
+}
+.scrub-off [data-stage='a'],
+.scrub-off [data-stage='c'] {
+  position: static !important;
+  opacity: 1 !important;
+  margin: 2.5rem auto 0;
+  max-width: 44rem;
+}
+
 /* Journey line */
 .journey-step::before {
   content: '';
