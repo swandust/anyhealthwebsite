@@ -228,7 +228,7 @@
     </section>
 
     <!-- ============ SCROLL-SCRUB: day to night ============ -->
-    <section id="booking" class="scroll-mt-24 bg-black text-white" data-scrub aria-label="24/7 booking, from day to night">
+    <section id="booking" class="scroll-mt-24 bg-white text-navy-900" data-scrub aria-label="24/7 booking, from day to night">
       <div class="scrub-track relative">
         <div class="scrub-stage flex items-center overflow-hidden">
           <!-- scroll-driven video -->
@@ -236,35 +236,32 @@
                  muted playsinline preload="auto" poster="/assets/frontdesk-scroll-poster.webp" aria-hidden="true">
             <source src="/assets/frontdesk-scroll.mp4" type="video/mp4" />
           </video>
-          <!-- edge fades so the black eases into neighbouring white sections -->
-          <div class="pointer-events-none absolute inset-x-0 top-0 z-10 h-20 bg-gradient-to-b from-black to-transparent"></div>
-          <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-24 bg-gradient-to-t from-black to-transparent"></div>
 
           <!-- STAGE A: daytime features (text on the right, phone is on the left) -->
           <div data-stage="a" class="scrub-panel absolute inset-0 z-20 flex items-center justify-center px-5 sm:justify-end sm:px-10 lg:px-16">
-            <div class="w-full max-w-md rounded-3xl bg-black/45 p-6 backdrop-blur-sm sm:max-w-lg sm:rounded-none sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
-              <span class="eyebrow-dark">Daytime · your clinic is open</span>
+            <div class="w-full max-w-md rounded-3xl bg-white/80 p-6 backdrop-blur-sm sm:max-w-lg sm:rounded-none sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <span class="eyebrow">Daytime · your clinic is open</span>
               <h3 class="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">Everything your front desk does, in one chat.</h3>
               <ul class="mt-6 space-y-3.5">
-                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">Books, confirms and reschedules</strong> - patients pick doctor, branch, time and visit type in one chat.</p></li>
-                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">A single voice message is enough</strong> - patients speak, the AI books. Perfect for elderly patients.</p></li>
-                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">Targets only interested patients</strong> - smart reminders and recovery campaigns cut no-shows from 28% to 10%.</p></li>
-                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-500/25 text-sage-300">✓</span><p class="text-sm leading-relaxed text-navy-100 sm:text-base"><strong class="font-bold text-white">Insurance interpreter</strong> - tells patients what their policy covers at your clinic before they book.</p></li>
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-sm leading-relaxed text-navy-700 sm:text-base"><strong class="font-bold text-navy-900">Books, confirms and reschedules</strong> - patients pick doctor, branch, time and visit type in one chat.</p></li>
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-sm leading-relaxed text-navy-700 sm:text-base"><strong class="font-bold text-navy-900">A single voice message is enough</strong> - patients speak, the AI books. Perfect for elderly patients.</p></li>
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-sm leading-relaxed text-navy-700 sm:text-base"><strong class="font-bold text-navy-900">Targets only interested patients</strong> - smart reminders and recovery campaigns cut no-shows from 28% to 10%.</p></li>
+                <li class="flex gap-3"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sage-100 text-sage-700">✓</span><p class="text-sm leading-relaxed text-navy-700 sm:text-base"><strong class="font-bold text-navy-900">Insurance interpreter</strong> - tells patients what their policy covers at your clinic before they book.</p></li>
               </ul>
             </div>
           </div>
 
           <!-- STAGE B: the flip headline (centre) -->
           <div data-stage="b" class="scrub-panel pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-6 text-center opacity-0">
-            <h2 class="text-4xl font-extrabold leading-[1.04] tracking-tight drop-shadow-lg sm:text-6xl lg:text-7xl">Your front desk sleeps.<br /><span class="text-sage-300">Your bookings don’t.</span></h2>
+            <h2 class="text-4xl font-extrabold leading-[1.04] tracking-tight text-navy-900 sm:text-6xl lg:text-7xl">Your front desk sleeps.<br /><span class="text-sage-600">Your bookings don’t.</span></h2>
           </div>
 
           <!-- STAGE C: night-time (text on the left, phone is on the right) -->
           <div data-stage="c" class="scrub-panel absolute inset-0 z-20 flex items-center justify-center px-5 opacity-0 sm:justify-start sm:px-10 lg:px-16">
-            <div class="w-full max-w-md rounded-3xl bg-black/45 p-6 backdrop-blur-sm sm:max-w-lg sm:rounded-none sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
-              <span class="eyebrow-dark">11 PM · Sunday · public holiday</span>
+            <div class="w-full max-w-md rounded-3xl bg-white/80 p-6 backdrop-blur-sm sm:max-w-lg sm:rounded-none sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <span class="eyebrow">11 PM · Sunday · public holiday</span>
               <h3 class="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">While the competition sends patients to voicemail.</h3>
-              <p class="mt-5 text-base leading-relaxed text-navy-100 sm:text-lg">62% of patients message outside office hours. AnyHealth answers instantly, shares its location to find the nearest branch, and turns real intent into confirmed appointments - all night, every night.</p>
+              <p class="mt-5 text-base leading-relaxed text-navy-700 sm:text-lg">62% of patients message outside office hours. AnyHealth answers instantly, shares its location to find the nearest branch, and turns real intent into confirmed appointments - all night, every night.</p>
             </div>
           </div>
 
@@ -275,7 +272,7 @@
               <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.87 9.87 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.8 14.01c-.25.7-1.44 1.34-1.99 1.42-.51.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.62-2.96-1.28-4.9-4.26-5.05-4.46-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37h.56c.18.01.42-.07.66.5.25.59.84 2.04.91 2.19.07.15.12.32.02.52-.35.7-.72.67-.44 1.13.63 1.03 1.63 1.72 2.37 2.03.3.13.47.12.65-.07.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.71.81 2.01.96.3.15.5.22.57.35.07.12.07.72-.18 1.42z"/></svg>
               Try the demo version
             </a>
-            <p class="text-xs font-medium text-white/60">Send “Hi” and pick your demo. We’ll approve you within an hour.</p>
+            <p class="text-xs font-medium text-navy-500">Send “Hi” and pick your demo. We’ll approve you within an hour.</p>
           </div>
         </div>
       </div>
