@@ -168,9 +168,20 @@ function initScrub(): void {
       v.style.opacity = o.toFixed(3);
       const push = 1 + 0.09 * localT(i, p); // slow camera push, keeps full-bleed (>=1)
       v.style.transform = `scale(${push.toFixed(3)})`;
-      if (o > 0.02) {
-        if (v.paused) v.play().catch(() => {});
-      } else if (!v.paused) {
+      // Play a scene once when you scroll into it; it then holds on its last
+      // frame (no loop). Scroll back in and it replays from the start.
+      const visible = o > 0.02;
+      const wasVisible = v.dataset.vis === '1';
+      if (visible && !wasVisible) {
+        v.dataset.vis = '1';
+        try {
+          v.currentTime = 0;
+        } catch {
+          /* ignore */
+        }
+        v.play().catch(() => {});
+      } else if (!visible && wasVisible) {
+        v.dataset.vis = '0';
         v.pause();
       }
     });
