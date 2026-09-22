@@ -301,77 +301,26 @@ details.faq[open] .faq-icon {
 [data-step-fill] {
   transition: transform 0.15s linear;
 }
-/* ---------- Parallax journey scene (code-built, sharp at any size) ---------- */
-.pl-scene {
-  transform-style: preserve-3d;
-}
-.pl-layer {
+/* ---------- Cinematic scene layers (camera flies through the journey) ---------- */
+.cine-layer {
   position: absolute;
   inset: 0;
-  will-change: transform;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: #0b1329;
+  transform-origin: center center;
+  transition: opacity 0.14s linear, filter 0.2s linear;
+  will-change: transform, opacity;
 }
-.pl-orb {
-  position: absolute;
-  border-radius: 9999px;
-  opacity: 0.6;
-  filter: blur(6px);
-}
-.pl-phone-wrap {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 5;
-  transform: translate(-50%, -50%);
-}
-.pl-phone {
-  will-change: transform;
-  transform-style: preserve-3d;
-  transition: transform 0.08s linear;
-}
-.pl-screenpanel {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: opacity 0.4s ease;
-  will-change: opacity, transform;
-}
-.pl-chip {
-  position: absolute;
-  transition: opacity 0.45s ease;
-  will-change: opacity, transform;
-}
-.pl-dot {
-  position: absolute;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 9999px;
-  background: #4e9a7e;
-  opacity: 0.45;
-}
-.pl-wave {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 18px;
-  color: #336655;
-}
-.pl-wave i {
-  display: block;
-  width: 2.5px;
-  border-radius: 2px;
-  background: currentColor;
-}
-@media (max-width: 640px) {
-  .pl-chip {
-    display: none;
-  }
+.cine-cap {
+  transition: opacity 0.35s ease;
+  will-change: opacity;
 }
 @media (prefers-reduced-motion: reduce) {
-  .pl-phone,
-  .pl-screenpanel,
-  .pl-chip {
+  .cine-layer,
+  .cine-cap {
     transition: none;
   }
 }
@@ -396,42 +345,34 @@ details.faq[open] .faq-icon {
   @apply text-sage-700;
 }
 
-/* Fallback when scrubbing is disabled (reduced motion) */
-.scrub-off .pl-scene {
-  display: none;
-}
+/* Fallback when scrubbing is disabled (reduced motion): drop the pin and the
+   camera choreography, and show the opening scene with its caption. */
 .scrub-off .scrub-track {
   height: auto;
 }
 .scrub-off .scrub-stage {
-  position: static;
-  height: auto;
-  display: block;
-  padding-block: 2.5rem;
+  position: relative;
+  height: 62vh;
+}
+.scrub-off .cine-layer {
+  transform: none !important;
+  opacity: 0 !important;
+}
+.scrub-off [data-cine='0'] {
+  opacity: 1 !important;
 }
 .scrub-off .scrub-progress {
   display: none;
 }
-.scrub-off .scrub-overlay {
-  position: static !important;
-  transform: none !important;
-  margin-top: 1.5rem;
-  pointer-events: auto;
+.scrub-off [data-cap] {
+  opacity: 0 !important;
 }
-.scrub-off .scrub-caption {
-  position: static;
-  height: auto;
-}
-.scrub-off [data-step] {
-  position: static !important;
+.scrub-off [data-cap='0'] {
   opacity: 1 !important;
-  transform: none !important;
-  margin-top: 0.75rem;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-step-dot] .step-num,
-  [data-step-dot] .step-label,
-  .scrub-panel {
+  [data-step-dot] .step-label {
     transition: none;
   }
 }

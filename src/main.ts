@@ -112,88 +112,102 @@ if (form) {
 const year = document.getElementById('year');
 if (year) year.textContent = String(new Date().getFullYear());
 
-/* ---------- Parallax patient-journey scene (home only) ---------- */
+/* ---------- Cinematic patient-journey (home only) ----------
+   Six full-HD scene clips loop while the scroll drives a "camera" that flies
+   through them: each scene zooms/pans in, holds, then hands off to the next.
+   Captions sit in each scene's empty space. */
+interface CineKey {
+  p: number;
+  o: number;
+  s: number;
+  x: number;
+  y: number;
+  b: number;
+  br: number;
+}
 function initScrub(): void {
   const section = document.querySelector<HTMLElement>('[data-scrub]');
   if (!section) return;
   const track = section.querySelector<HTMLElement>('.scrub-track');
-  const panels = Array.from(section.querySelectorAll<HTMLElement>('[data-step]'));
+  const vids = Array.from(section.querySelectorAll<HTMLVideoElement>('[data-cine]'));
+  const caps = Array.from(section.querySelectorAll<HTMLElement>('[data-cap]'));
   const dots = Array.from(section.querySelectorAll<HTMLElement>('[data-step-dot]'));
   const fill = section.querySelector<HTMLElement>('[data-step-fill]');
-  const layers = Array.from(section.querySelectorAll<HTMLElement>('[data-depth]'));
-  const phone = section.querySelector<HTMLElement>('[data-phone]');
-  const screens = Array.from(section.querySelectorAll<HTMLElement>('[data-screen]'));
-  const chips = Array.from(section.querySelectorAll<HTMLElement>('[data-chip]'));
-  if (!track || panels.length === 0) return;
+  if (!track || vids.length === 0) return;
 
-  // Six equal stage windows across the scroll.
-  const N = panels.length;
-  const bounds = Array.from({ length: N + 1 }, (_, i) => i / N);
-  const FADE = 0.03;
+  const k = (p: number, o: number, s: number, x: number, y: number, b = 0, br = 1): CineKey => ({ p, o, s, x, y, b, br });
+  // Camera keyframes per scene: opacity, scale, translate x/y (%), blur px, brightness.
+  const scenes: CineKey[][] = [
+    [k(0, 1, 1, 0, 0), k(0.13, 1, 1, 0, 0), k(0.2, 0, 0.55, -6, -6, 4, 0.6)], // 1 full -> recede
+    [k(0.1, 0, 0.28, 42, -28, 2, 0.9), k(0.23, 1, 1, 0, 0), k(0.31, 1, 1, 0, 0), k(0.39, 0, 0.95, -105, 0, 0, 0.8)], // 2 in from top-right -> swipe left
+    [k(0.31, 0, 1, 105, 0, 0, 0.9), k(0.42, 1, 1, 0, 0), k(0.5, 1, 1, 0, 0), k(0.57, 0, 0.5, -6, 8, 4, 0.6)], // 3 in from right -> recede
+    [k(0.52, 0, 0.62, 58, 0, 1, 0.95), k(0.6, 1, 0.6, 22, 0, 0, 1), k(0.69, 1, 0.6, 22, 0, 0, 1), k(0.77, 0, 2.3, 4, -4, 2, 1)], // 4 right half -> zoom through
+    [k(0.71, 0, 1.18, 0, 0, 2, 1), k(0.79, 1, 1, 0, 0), k(0.87, 1, 1, 0, 0), k(0.92, 0, 1.08, 0, 0, 0, 0.9)], // 5 full
+    [k(0.88, 0, 1.1, 0, 0, 2, 1), k(0.95, 1, 1, 0, 0), k(1, 1, 1, 0, 0)], // 6 full
+  ];
+  // Caption visibility windows [fadeInStart, full, holdEnd, fadeOutEnd].
+  const capWin = [
+    [0.0, 0.03, 0.12, 0.17],
+    [0.22, 0.25, 0.31, 0.36],
+    [0.4, 0.43, 0.49, 0.54],
+    [0.585, 0.61, 0.7, 0.735],
+    [0.785, 0.81, 0.87, 0.9],
+    [0.93, 0.955, 1, 1],
+  ];
+  const stepB = [0, 0.18, 0.36, 0.53, 0.72, 0.9, 1];
 
-  // Reduced motion: drop the pin and show the steps as a stacked list.
+  const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
+
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     section.classList.add('scrub-off');
+    vids.forEach((v, i) => {
+      v.style.transform = 'none';
+      if (i === 0) v.play().catch(() => {});
+      else v.pause();
+    });
     return;
   }
 
-  const ramp = (p: number, lo: number, hi: number) =>
-    p <= lo ? 0 : p >= hi ? 1 : (p - lo) / (hi - lo);
-  const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
-
-  // Opacity for stage i: full within its window, cross-fading at the borders.
-  const winOpacity = (i: number, p: number) => {
-    const s = bounds[i];
-    const e = bounds[i + 1];
-    const fin = i === 0 ? 1 : ramp(p, s - FADE, s + FADE);
-    const fout = i === N - 1 ? 1 : 1 - ramp(p, e - FADE, e + FADE);
-    return Math.min(fin, fout);
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const at = (keys: CineKey[], p: number): CineKey => {
+    if (p <= keys[0].p) return keys[0];
+    const last = keys[keys.length - 1];
+    if (p >= last.p) return last;
+    for (let i = 0; i < keys.length - 1; i++) {
+      const a = keys[i];
+      const b = keys[i + 1];
+      if (p >= a.p && p <= b.p) {
+        const t = (p - a.p) / (b.p - a.p || 1);
+        return { p, o: lerp(a.o, b.o, t), s: lerp(a.s, b.s, t), x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), b: lerp(a.b, b.b, t), br: lerp(a.br, b.br, t) };
+      }
+    }
+    return last;
   };
-  // Local 0..1 progress through stage i's window.
-  const localT = (i: number, p: number) =>
-    clamp01((p - bounds[i]) / (bounds[i + 1] - bounds[i] || 1));
+  const capOpacity = (w: number[], p: number) => {
+    if (p < w[0] || p > w[3]) return 0;
+    if (p < w[1]) return clamp01((p - w[0]) / (w[1] - w[0] || 1));
+    if (p > w[2]) return clamp01((w[3] - p) / (w[3] - w[2] || 1));
+    return 1;
+  };
 
   const apply = (p: number) => {
+    vids.forEach((v, i) => {
+      const st = at(scenes[i], p);
+      v.style.opacity = st.o.toFixed(3);
+      v.style.transform = `translate(${st.x.toFixed(2)}%, ${st.y.toFixed(2)}%) scale(${st.s.toFixed(3)})`;
+      v.style.filter = st.b > 0.05 || st.br < 0.995 ? `blur(${st.b.toFixed(1)}px) brightness(${st.br.toFixed(2)})` : 'none';
+      // Only decode/play layers that are near-visible.
+      if (st.o > 0.02) {
+        if (v.paused) v.play().catch(() => {});
+      } else if (!v.paused) {
+        v.pause();
+      }
+    });
+
+    caps.forEach((c, i) => (c.style.opacity = capOpacity(capWin[i], p).toFixed(3)));
+
     let active = 0;
-    for (let i = 0; i < N; i++) if (p >= bounds[i]) active = i;
-
-    // Caption words travel with the scroll (rise + alternate drift).
-    for (let i = 0; i < N; i++) {
-      panels[i].style.opacity = winOpacity(i, p).toFixed(3);
-      const lt = localT(i, p);
-      const ty = (0.5 - lt) * 64;
-      const tx = (0.5 - lt) * 26 * (i % 2 === 0 ? -1 : 1);
-      panels[i].style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0)`;
-    }
-
-    // Phone screens morph through the journey (cross-fade + gentle slide).
-    screens.forEach((sc, i) => {
-      sc.style.opacity = winOpacity(i, p).toFixed(3);
-      const ty = (0.5 - localT(i, p)) * 16;
-      sc.style.transform = `translateY(${ty.toFixed(1)}px)`;
-    });
-
-    // Floating stage labels fade with their stage.
-    chips.forEach((c, i) => {
-      c.style.opacity = winOpacity(i, p).toFixed(3);
-    });
-
-    // The phone turns in 3D and floats as you travel.
-    if (phone) {
-      const ry = (p - 0.5) * -26;
-      const rx = 6 - Math.sin(p * Math.PI) * 4;
-      const fy = Math.sin(p * Math.PI * 2) * -5;
-      phone.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(${fy.toFixed(1)}px)`;
-    }
-
-    // Depth parallax: layers pan/drift at rates set by their data-depth.
-    layers.forEach((l) => {
-      const d = parseFloat(l.dataset.depth || '0');
-      const tx = (p - 0.5) * -130 * d;
-      const ty = (p - 0.5) * 34 * d;
-      l.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0)`;
-    });
-
+    for (let i = 0; i < stepB.length - 1; i++) if (p >= stepB[i]) active = i;
     dots.forEach((d, i) => {
       d.classList.toggle('is-active', i === active);
       d.classList.toggle('is-done', i < active);
