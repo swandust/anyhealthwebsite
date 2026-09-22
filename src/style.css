@@ -301,6 +301,13 @@ details.faq[open] .faq-icon {
 [data-step-fill] {
   transition: transform 0.15s linear;
 }
+/* On narrow phones, contain the landscape clip (full-screen height, cream
+   fills the rest) instead of cropping its sides away. */
+@media (max-width: 640px) {
+  [data-scrub-video] {
+    object-fit: contain;
+  }
+}
 
 /* Progress stepper */
 [data-step-dot] .step-num {
@@ -333,15 +340,31 @@ details.faq[open] .faq-icon {
   padding-block: 2.5rem;
 }
 .scrub-off [data-scrub-video] {
-  max-height: none;
+  position: static;
+  height: auto;
+  max-height: 68vh;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 1rem;
+}
+.scrub-off .scrub-overlay {
+  position: static !important;
+  transform: none !important;
+  margin-top: 1.5rem;
+  pointer-events: auto;
 }
 .scrub-off .scrub-caption {
+  position: static;
   height: auto;
 }
 .scrub-off [data-step] {
   position: static !important;
   opacity: 1 !important;
-  margin-top: 1.75rem;
+  margin-top: 0.75rem;
+}
+.scrub-off .scrub-overlay .absolute,
+.scrub-off [data-step-fill] {
+  display: none;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-step-dot] .step-num,

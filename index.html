@@ -204,36 +204,42 @@
       </div>
 
       <div class="scrub-track relative">
-        <div class="scrub-stage flex items-center">
-          <div class="container-site w-full">
-            <!-- progress stepper -->
-            <div class="relative mx-auto max-w-3xl px-1">
-              <div class="absolute left-[1.15rem] right-[1.15rem] top-[1.1rem] h-[3px] rounded-full bg-navy-100" aria-hidden="true"></div>
-              <div data-step-fill class="absolute left-[1.15rem] right-[1.15rem] top-[1.1rem] h-[3px] origin-left rounded-full bg-sage-500" style="transform:scaleX(0)" aria-hidden="true"></div>
-              <ol data-steps class="relative flex items-start justify-between" aria-hidden="true">
-                <li data-step-dot="0" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">1</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Discover</span></li>
-                <li data-step-dot="1" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">2</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Triage</span></li>
-                <li data-step-dot="2" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">3</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Schedule</span></li>
-                <li data-step-dot="3" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">4</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Visit</span></li>
-                <li data-step-dot="4" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">5</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Care plan</span></li>
-                <li data-step-dot="5" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">6</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Outcomes</span></li>
+        <div class="scrub-stage relative overflow-hidden bg-[#f4ece6]">
+          <!-- full-bleed scroll-driven video -->
+          <video data-scrub-video class="absolute inset-0 h-full w-full object-cover"
+                 muted playsinline preload="auto" poster="/assets/lifecycle-scroll-poster.webp" aria-hidden="true">
+            <source src="/assets/lifecycle-scroll.mp4" type="video/mp4" />
+          </video>
+          <!-- legibility scrims -->
+          <div class="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/70 to-transparent" aria-hidden="true"></div>
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-white/70 to-transparent" aria-hidden="true"></div>
+
+          <!-- TOP: label + progress stepper -->
+          <div class="scrub-overlay pointer-events-none absolute inset-x-0 top-6 z-10 flex flex-col items-center gap-4 px-4 sm:top-8">
+            <span class="rounded-full border border-white/60 bg-white/80 px-4 py-1.5 text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-sage-700 shadow-sm backdrop-blur-md">Follow one patient, end to end</span>
+            <div class="relative w-full max-w-xl rounded-full border border-white/50 bg-white/70 px-6 py-3 shadow-lg shadow-navy-900/5 backdrop-blur-md">
+              <div class="absolute left-[1.65rem] right-[1.65rem] top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-navy-100" aria-hidden="true"></div>
+              <div data-step-fill class="absolute left-[1.65rem] right-[1.65rem] top-1/2 h-[3px] -translate-y-1/2 origin-left rounded-full bg-sage-500" style="transform:scaleX(0)" aria-hidden="true"></div>
+              <ol data-steps class="relative flex items-center justify-between" aria-hidden="true">
+                <li data-step-dot="0" class="flex"><span class="step-num flex h-8 w-8 items-center justify-center rounded-full text-[0.8rem] font-extrabold">1</span></li>
+                <li data-step-dot="1" class="flex"><span class="step-num flex h-8 w-8 items-center justify-center rounded-full text-[0.8rem] font-extrabold">2</span></li>
+                <li data-step-dot="2" class="flex"><span class="step-num flex h-8 w-8 items-center justify-center rounded-full text-[0.8rem] font-extrabold">3</span></li>
+                <li data-step-dot="3" class="flex"><span class="step-num flex h-8 w-8 items-center justify-center rounded-full text-[0.8rem] font-extrabold">4</span></li>
+                <li data-step-dot="4" class="flex"><span class="step-num flex h-8 w-8 items-center justify-center rounded-full text-[0.8rem] font-extrabold">5</span></li>
+                <li data-step-dot="5" class="flex"><span class="step-num flex h-8 w-8 items-center justify-center rounded-full text-[0.8rem] font-extrabold">6</span></li>
               </ol>
             </div>
+          </div>
 
-            <!-- scroll-driven video -->
-            <video data-scrub-video class="mx-auto mt-7 block max-h-[54vh] w-full max-w-4xl rounded-[1.6rem] bg-[#f4ece6] object-contain shadow-2xl shadow-navy-900/10 ring-1 ring-navy-900/5"
-                   muted playsinline preload="auto" poster="/assets/lifecycle-scroll-poster.webp" aria-hidden="true">
-              <source src="/assets/lifecycle-scroll.mp4" type="video/mp4" />
-            </video>
-
-            <!-- swapping caption -->
-            <div class="scrub-caption relative mx-auto mt-6 h-24 max-w-2xl sm:h-[5.5rem]">
-              <div data-step="0" class="scrub-panel absolute inset-0 px-4 text-center"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Discover &amp; access</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">A patient reaches out on WhatsApp with a voice note - no app, no portal, no password.</p></div>
-              <div data-step="1" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Triage &amp; guidance</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">The AI understands the request and guides them to the right service - then offers to book, safely.</p></div>
-              <div data-step="2" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Schedule &amp; prepare</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">It checks real availability, books the slot into your calendar and confirms - all in the chat.</p></div>
-              <div data-step="3" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Visit &amp; consult</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">The patient arrives and your provider sees the full summary, history and documents - ready.</p></div>
-              <div data-step="4" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Care plan &amp; actions</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">Prescriptions, check-ins and follow-up tasks turn into clear, tracked next steps for the patient.</p></div>
-              <div data-step="5" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Follow-up &amp; outcomes</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">Medication reminders and recovery check-ins keep patients on track - long after the visit.</p></div>
+          <!-- BOTTOM: the words travel with the patient -->
+          <div class="scrub-overlay pointer-events-none absolute inset-x-0 bottom-9 z-10 flex justify-center px-4 sm:bottom-12">
+            <div class="scrub-caption relative h-[6.5rem] w-full max-w-xl overflow-hidden rounded-2xl border border-white/60 bg-white/85 shadow-2xl shadow-navy-900/15 backdrop-blur-md sm:h-24">
+              <div data-step="0" class="scrub-panel absolute inset-0 flex flex-col items-center justify-center px-6 text-center"><div class="flex items-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.2em] text-sage-600">01</span><h3 class="text-lg font-extrabold text-navy-900 sm:text-xl">Discover &amp; access</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-600">A patient sends a WhatsApp voice note - no app, no portal, no password.</p></div>
+              <div data-step="1" class="scrub-panel absolute inset-0 flex flex-col items-center justify-center px-6 text-center" style="opacity:0"><div class="flex items-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.2em] text-sage-600">02</span><h3 class="text-lg font-extrabold text-navy-900 sm:text-xl">Triage &amp; guidance</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-600">The AI understands the request, guides them to the right service and offers to book - safely.</p></div>
+              <div data-step="2" class="scrub-panel absolute inset-0 flex flex-col items-center justify-center px-6 text-center" style="opacity:0"><div class="flex items-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.2em] text-sage-600">03</span><h3 class="text-lg font-extrabold text-navy-900 sm:text-xl">Schedule &amp; prepare</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-600">It checks real availability, books the slot into your calendar and confirms - all in the chat.</p></div>
+              <div data-step="3" class="scrub-panel absolute inset-0 flex flex-col items-center justify-center px-6 text-center" style="opacity:0"><div class="flex items-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.2em] text-sage-600">04</span><h3 class="text-lg font-extrabold text-navy-900 sm:text-xl">Visit &amp; consult</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-600">The patient arrives and the provider sees the full summary, history and documents - ready.</p></div>
+              <div data-step="4" class="scrub-panel absolute inset-0 flex flex-col items-center justify-center px-6 text-center" style="opacity:0"><div class="flex items-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.2em] text-sage-600">05</span><h3 class="text-lg font-extrabold text-navy-900 sm:text-xl">Care plan &amp; actions</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-600">Prescriptions, check-ins and follow-ups become clear, tracked next steps for the patient.</p></div>
+              <div data-step="5" class="scrub-panel absolute inset-0 flex flex-col items-center justify-center px-6 text-center" style="opacity:0"><div class="flex items-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.2em] text-sage-600">06</span><h3 class="text-lg font-extrabold text-navy-900 sm:text-xl">Follow-up &amp; outcomes</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-600">Medication reminders and recovery check-ins keep patients on track - long after the visit.</p></div>
             </div>
           </div>
         </div>
