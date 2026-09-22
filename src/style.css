@@ -347,6 +347,9 @@ details.faq[open] .faq-icon {
   object-fit: contain;
   border-radius: 1rem;
 }
+.scrub-off .scrub-progress {
+  display: none;
+}
 .scrub-off .scrub-overlay {
   position: static !important;
   transform: none !important;
@@ -360,11 +363,8 @@ details.faq[open] .faq-icon {
 .scrub-off [data-step] {
   position: static !important;
   opacity: 1 !important;
+  transform: none !important;
   margin-top: 0.75rem;
-}
-.scrub-off .scrub-overlay .absolute,
-.scrub-off [data-step-fill] {
-  display: none;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-step-dot] .step-num,

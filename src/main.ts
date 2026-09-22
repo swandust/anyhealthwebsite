@@ -164,6 +164,12 @@ function initScrub(): void {
       const fin = i === 0 ? 1 : ramp(p, s - FADE, s + FADE);
       const fout = i === N - 1 ? 1 : 1 - ramp(p, e - FADE, e + FADE);
       panels[i].style.opacity = Math.min(fin, fout).toFixed(3);
+      // The words travel with the scroll: rise through the frame and drift
+      // sideways (alternating) across each step's window.
+      const lt = Math.min(1, Math.max(0, (p - s) / (e - s || 1)));
+      const ty = (0.5 - lt) * 64; // +32px below -> 0 -> -32px above
+      const tx = (0.5 - lt) * 26 * (i % 2 === 0 ? -1 : 1);
+      panels[i].style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0)`;
     }
     dots.forEach((d, i) => {
       d.classList.toggle('is-active', i === active);
