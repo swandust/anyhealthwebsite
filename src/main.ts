@@ -113,18 +113,9 @@ const year = document.getElementById('year');
 if (year) year.textContent = String(new Date().getFullYear());
 
 /* ---------- Cinematic patient-journey (home only) ----------
-   Six full-HD scene clips loop while the scroll drives a "camera" that flies
-   through them: each scene zooms/pans in, holds, then hands off to the next.
-   Captions sit in each scene's empty space. */
-interface CineKey {
-  p: number;
-  o: number;
-  s: number;
-  x: number;
-  y: number;
-  b: number;
-  br: number;
-}
+   Six full-HD scene clips play full-screen and cross-fade (blend) into each
+   other as you scroll, with a slow camera push on each. Captions sit in each
+   scene's empty space. Works the same on laptop and iPhone. */
 function initScrub(): void {
   const section = document.querySelector<HTMLElement>('[data-scrub]');
   if (!section) return;
@@ -135,28 +126,9 @@ function initScrub(): void {
   const fill = section.querySelector<HTMLElement>('[data-step-fill]');
   if (!track || vids.length === 0) return;
 
-  const k = (p: number, o: number, s: number, x: number, y: number, b = 0, br = 1): CineKey => ({ p, o, s, x, y, b, br });
-  // Camera keyframes per scene: opacity, scale, translate x/y (%), blur px, brightness.
-  const scenes: CineKey[][] = [
-    [k(0, 1, 1, 0, 0), k(0.13, 1, 1, 0, 0), k(0.2, 0, 0.55, -6, -6, 4, 0.6)], // 1 full -> recede
-    [k(0.1, 0, 0.28, 42, -28, 2, 0.9), k(0.23, 1, 1, 0, 0), k(0.31, 1, 1, 0, 0), k(0.39, 0, 0.95, -105, 0, 0, 0.8)], // 2 in from top-right -> swipe left
-    [k(0.31, 0, 1, 105, 0, 0, 0.9), k(0.42, 1, 1, 0, 0), k(0.5, 1, 1, 0, 0), k(0.57, 0, 0.5, -6, 8, 4, 0.6)], // 3 in from right -> recede
-    [k(0.52, 0, 0.62, 58, 0, 1, 0.95), k(0.6, 1, 0.6, 22, 0, 0, 1), k(0.69, 1, 0.6, 22, 0, 0, 1), k(0.77, 0, 2.3, 4, -4, 2, 1)], // 4 right half -> zoom through
-    [k(0.71, 0, 1.18, 0, 0, 2, 1), k(0.79, 1, 1, 0, 0), k(0.87, 1, 1, 0, 0), k(0.92, 0, 1.08, 0, 0, 0, 0.9)], // 5 full
-    [k(0.88, 0, 1.1, 0, 0, 2, 1), k(0.95, 1, 1, 0, 0), k(1, 1, 1, 0, 0)], // 6 full
-  ];
-  // Caption visibility windows [fadeInStart, full, holdEnd, fadeOutEnd].
-  const capWin = [
-    [0.0, 0.03, 0.12, 0.17],
-    [0.22, 0.25, 0.31, 0.36],
-    [0.4, 0.43, 0.49, 0.54],
-    [0.585, 0.61, 0.7, 0.735],
-    [0.785, 0.81, 0.87, 0.9],
-    [0.93, 0.955, 1, 1],
-  ];
-  const stepB = [0, 0.18, 0.36, 0.53, 0.72, 0.9, 1];
-
-  const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
+  const N = vids.length; // 6
+  const bounds = Array.from({ length: N + 1 }, (_, i) => i / N);
+  const FADE = 0.055; // half-width of each cross-fade blend
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     section.classList.add('scrub-off');
@@ -168,46 +140,45 @@ function initScrub(): void {
     return;
   }
 
-  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-  const at = (keys: CineKey[], p: number): CineKey => {
-    if (p <= keys[0].p) return keys[0];
-    const last = keys[keys.length - 1];
-    if (p >= last.p) return last;
-    for (let i = 0; i < keys.length - 1; i++) {
-      const a = keys[i];
-      const b = keys[i + 1];
-      if (p >= a.p && p <= b.p) {
-        const t = (p - a.p) / (b.p - a.p || 1);
-        return { p, o: lerp(a.o, b.o, t), s: lerp(a.s, b.s, t), x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), b: lerp(a.b, b.b, t), br: lerp(a.br, b.br, t) };
-      }
-    }
-    return last;
+  const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
+  const ramp = (p: number, lo: number, hi: number) => (p <= lo ? 0 : p >= hi ? 1 : (p - lo) / (hi - lo));
+
+  // Scene i is fully opaque within its window and cross-fades at the borders.
+  const sceneOpacity = (i: number, p: number) => {
+    const fin = i === 0 ? 1 : ramp(p, bounds[i] - FADE, bounds[i] + FADE);
+    const fout = i === N - 1 ? 1 : 1 - ramp(p, bounds[i + 1] - FADE, bounds[i + 1] + FADE);
+    return Math.min(fin, fout);
   };
-  const capOpacity = (w: number[], p: number) => {
-    if (p < w[0] || p > w[3]) return 0;
-    if (p < w[1]) return clamp01((p - w[0]) / (w[1] - w[0] || 1));
-    if (p > w[2]) return clamp01((w[3] - p) / (w[3] - w[2] || 1));
+  const localT = (i: number, p: number) => clamp01((p - bounds[i]) / (bounds[i + 1] - bounds[i] || 1));
+  // Caption trapezoid: fades in just after a scene arrives, out just before it leaves.
+  const captionOpacity = (i: number, p: number) => {
+    const s = i === 0 ? 0 : bounds[i] + 0.02;
+    const sf = bounds[i] + 0.055;
+    const eh = bounds[i + 1] - 0.055;
+    const e = i === N - 1 ? 1 : bounds[i + 1] - 0.02;
+    if (p <= s || p >= e) return 0;
+    if (p < sf) return clamp01((p - s) / (sf - s || 1));
+    if (p > eh) return clamp01((e - p) / (e - eh || 1));
     return 1;
   };
 
   const apply = (p: number) => {
     vids.forEach((v, i) => {
-      const st = at(scenes[i], p);
-      v.style.opacity = st.o.toFixed(3);
-      v.style.transform = `translate(${st.x.toFixed(2)}%, ${st.y.toFixed(2)}%) scale(${st.s.toFixed(3)})`;
-      v.style.filter = st.b > 0.05 || st.br < 0.995 ? `blur(${st.b.toFixed(1)}px) brightness(${st.br.toFixed(2)})` : 'none';
-      // Only decode/play layers that are near-visible.
-      if (st.o > 0.02) {
+      const o = sceneOpacity(i, p);
+      v.style.opacity = o.toFixed(3);
+      const push = 1 + 0.09 * localT(i, p); // slow camera push, keeps full-bleed (>=1)
+      v.style.transform = `scale(${push.toFixed(3)})`;
+      if (o > 0.02) {
         if (v.paused) v.play().catch(() => {});
       } else if (!v.paused) {
         v.pause();
       }
     });
 
-    caps.forEach((c, i) => (c.style.opacity = capOpacity(capWin[i], p).toFixed(3)));
+    caps.forEach((c, i) => (c.style.opacity = captionOpacity(i, p).toFixed(3)));
 
     let active = 0;
-    for (let i = 0; i < stepB.length - 1; i++) if (p >= stepB[i]) active = i;
+    for (let i = 0; i < N; i++) if (p >= bounds[i]) active = i;
     dots.forEach((d, i) => {
       d.classList.toggle('is-active', i === active);
       d.classList.toggle('is-done', i < active);
