@@ -204,15 +204,107 @@
       </div>
 
       <div class="scrub-track relative">
-        <div class="scrub-stage relative overflow-hidden bg-[#f4ece6]">
-          <!-- full-bleed scroll-driven video -->
-          <video data-scrub-video class="absolute inset-0 h-full w-full object-cover"
-                 muted playsinline preload="auto" poster="/assets/lifecycle-scroll-poster.webp" aria-hidden="true">
-            <source src="/assets/lifecycle-scroll.mp4" type="video/mp4" />
-          </video>
+        <div class="scrub-stage relative overflow-hidden bg-gradient-to-b from-sage-50 via-white to-sage-50">
+          <!-- ===== parallax journey scene ===== -->
+          <div class="pl-scene absolute inset-0" style="perspective:1300px" aria-hidden="true">
+            <!-- far: drifting colour orbs -->
+            <div data-depth="0.12" class="pl-layer">
+              <span class="pl-orb" style="width:36rem;height:36rem;left:-9rem;top:-8rem;background:radial-gradient(circle,#C3E0D3,transparent 68%)"></span>
+              <span class="pl-orb" style="width:30rem;height:30rem;right:-8rem;bottom:-10rem;background:radial-gradient(circle,rgba(231,168,62,0.4),transparent 70%)"></span>
+              <span class="pl-orb" style="width:24rem;height:24rem;right:14%;top:2%;background:radial-gradient(circle,#9CCAB6,transparent 72%)"></span>
+            </div>
+            <!-- mid-far: dotted journey arc -->
+            <div data-depth="0.3" class="pl-layer">
+              <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" class="h-full w-full opacity-70"><path d="M-60 440 C 220 360 320 250 620 300 S 1000 440 1260 300" fill="none" stroke="#9CCAB6" stroke-width="2.5" stroke-dasharray="2 10" stroke-linecap="round"/></svg>
+            </div>
+            <!-- mid: floating stage labels -->
+            <div data-depth="0.62" class="pl-layer">
+              <div data-chip="0" class="pl-chip left-[9%] top-[30%] flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-xs font-bold text-navy-800 shadow-lg shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md"><span class="h-1.5 w-1.5 rounded-full bg-sage-500"></span>Voice note</div>
+              <div data-chip="1" class="pl-chip right-[9%] top-[34%] flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-xs font-bold text-navy-800 shadow-lg shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md" style="opacity:0"><span class="h-1.5 w-1.5 rounded-full bg-sage-500"></span>Right service</div>
+              <div data-chip="2" class="pl-chip left-[11%] top-[38%] flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-xs font-bold text-navy-800 shadow-lg shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md" style="opacity:0"><span class="h-1.5 w-1.5 rounded-full bg-sage-500"></span>Calendar synced</div>
+              <div data-chip="3" class="pl-chip right-[10%] top-[29%] flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-xs font-bold text-navy-800 shadow-lg shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md" style="opacity:0"><span class="h-1.5 w-1.5 rounded-full bg-sage-500"></span>History ready</div>
+              <div data-chip="4" class="pl-chip left-[10%] top-[33%] flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-xs font-bold text-navy-800 shadow-lg shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md" style="opacity:0"><span class="h-1.5 w-1.5 rounded-full bg-sage-500"></span>Follow-up set</div>
+              <div data-chip="5" class="pl-chip right-[11%] top-[36%] flex items-center gap-2 rounded-full bg-white/85 px-3.5 py-1.5 text-xs font-bold text-navy-800 shadow-lg shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md" style="opacity:0"><span class="h-1.5 w-1.5 rounded-full bg-sage-500"></span>Adherence tracked</div>
+            </div>
+            <!-- focal: 3D-tilting phone, screen morphs through the journey -->
+            <div class="pl-phone-wrap">
+              <div data-phone class="pl-phone">
+                <div class="phone-frame">
+                  <div class="phone-screen chat-canvas aspect-[9/19.3] h-[clamp(288px,47vh,460px)]">
+                    <!-- 1 Discover: voice note -->
+                    <div data-screen="0" class="pl-screenpanel">
+                      <div class="flex items-center gap-2 bg-wa-deep px-3 py-2 text-white"><span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[0.7rem] font-bold">✚</span><div class="text-[0.62rem] font-bold leading-tight">AnyHealth Clinic<span class="block font-normal opacity-70">online</span></div></div>
+                      <div class="flex flex-1 flex-col gap-2 p-3">
+                        <div class="bubble bubble-out"><div class="flex items-center gap-2 text-sage-800"><span class="text-sm">▶</span><span class="pl-wave"><i style="height:5px"></i><i style="height:11px"></i><i style="height:7px"></i><i style="height:15px"></i><i style="height:9px"></i><i style="height:16px"></i><i style="height:6px"></i><i style="height:13px"></i><i style="height:8px"></i><i style="height:14px"></i><i style="height:5px"></i><i style="height:10px"></i></span><span class="text-[0.6rem] font-semibold">0:07</span></div><span class="bubble-time">16:00 ✓✓</span></div>
+                        <div class="bubble bubble-in">🎤 "I'd like a skin review tomorrow."<span class="bubble-time">16:00</span></div>
+                      </div>
+                    </div>
+                    <!-- 2 Triage: suggests + Book -->
+                    <div data-screen="1" class="pl-screenpanel" style="opacity:0">
+                      <div class="flex items-center gap-2 bg-wa-deep px-3 py-2 text-white"><span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[0.7rem] font-bold">✚</span><div class="text-[0.62rem] font-bold leading-tight">AnyHealth Clinic<span class="block font-normal opacity-70">typing…</span></div></div>
+                      <div class="flex flex-1 flex-col gap-2 p-3">
+                        <div class="bubble bubble-in">For that I'd suggest <strong>Consultation &amp; Skin Analysis</strong> ✨<span class="bubble-time">16:01</span></div>
+                        <div class="mt-1 space-y-1.5">
+                          <button class="w-full rounded-lg bg-white py-2 text-[0.72rem] font-bold text-wa-deep shadow-sm">📅 Book now</button>
+                          <button class="w-full rounded-lg bg-white/70 py-2 text-[0.72rem] font-semibold text-navy-600 shadow-sm">See other services</button>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 3 Schedule: confirmed -->
+                    <div data-screen="2" class="pl-screenpanel" style="opacity:0">
+                      <div class="flex items-center gap-2 bg-wa-deep px-3 py-2 text-white"><span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[0.7rem] font-bold">✚</span><div class="text-[0.62rem] font-bold leading-tight">AnyHealth Clinic<span class="block font-normal opacity-70">online</span></div></div>
+                      <div class="flex flex-1 flex-col items-center justify-center gap-3 p-4">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-sage-100 text-2xl text-sage-600">✓</div>
+                        <div class="w-full rounded-xl bg-white p-3 text-center shadow-sm">
+                          <p class="text-[0.7rem] font-extrabold text-navy-900">Appointment booked</p>
+                          <p class="mt-1 text-[0.66rem] leading-relaxed text-navy-600">Mon, 21 Sep · 4:00 PM<br />Dr Marcus Chia · Marina</p>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- 4 Visit: summary ready -->
+                    <div data-screen="3" class="pl-screenpanel" style="opacity:0">
+                      <div class="flex items-center gap-2 bg-navy px-3 py-2 text-white"><span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[0.7rem] font-bold">✚</span><div class="text-[0.62rem] font-bold leading-tight">Clinic dashboard<span class="block font-normal opacity-70">Patient ready</span></div></div>
+                      <div class="flex flex-1 flex-col gap-2 p-3">
+                        <div class="rounded-xl bg-white p-3 shadow-sm">
+                          <p class="text-[0.7rem] font-extrabold text-navy-900">Patient summary</p>
+                          <ul class="mt-1.5 space-y-1 text-[0.64rem] leading-snug text-navy-600"><li>• Skin review · eczema history</li><li>• Last visit 12 Aug · improving</li><li>• Allergies: none on file</li></ul>
+                        </div>
+                        <div class="rounded-lg bg-sage-50 px-3 py-1.5 text-[0.64rem] font-bold text-sage-700">Ready for Dr Chia ✓</div>
+                      </div>
+                    </div>
+                    <!-- 5 Care plan -->
+                    <div data-screen="4" class="pl-screenpanel" style="opacity:0">
+                      <div class="flex items-center gap-2 bg-navy px-3 py-2 text-white"><span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[0.7rem] font-bold">✚</span><div class="text-[0.62rem] font-bold leading-tight">Care plan<span class="block font-normal opacity-70">Sent to patient</span></div></div>
+                      <div class="flex flex-1 flex-col gap-1.5 p-3">
+                        <div class="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-[0.66rem] font-semibold text-navy-800 shadow-sm"><span class="text-sage-600">✓</span>Prescription sent to pharmacy</div>
+                        <div class="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-[0.66rem] font-semibold text-navy-800 shadow-sm"><span class="text-sage-600">✓</span>5-day recovery check-ins</div>
+                        <div class="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-[0.66rem] font-semibold text-navy-800 shadow-sm"><span class="text-sage-600">✓</span>Medication reminders on</div>
+                      </div>
+                    </div>
+                    <!-- 6 Outcomes: reminder -->
+                    <div data-screen="5" class="pl-screenpanel" style="opacity:0">
+                      <div class="flex items-center gap-2 bg-wa-deep px-3 py-2 text-white"><span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[0.7rem] font-bold">✚</span><div class="text-[0.62rem] font-bold leading-tight">AnyHealth Clinic<span class="block font-normal opacity-70">online</span></div></div>
+                      <div class="flex flex-1 flex-col gap-2 p-3">
+                        <div class="bubble bubble-in">⏰ Time for your medication<br /><strong>Amoxicillin 500 mg</strong><span class="bubble-time">08:00</span></div>
+                        <button class="w-full rounded-lg bg-white py-2 text-[0.72rem] font-bold text-wa-deep shadow-sm">✓ Taken</button>
+                        <div class="mt-1 self-center rounded-full bg-sage-100 px-3 py-1 text-[0.62rem] font-bold text-sage-700">Recovery on track 🎉</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- near: foreground sparkles -->
+            <div data-depth="1.5" class="pl-layer">
+              <span class="pl-dot" style="left:16%;top:26%"></span>
+              <span class="pl-dot" style="right:18%;top:64%;width:.375rem;height:.375rem"></span>
+              <span class="pl-dot" style="left:24%;bottom:20%;width:.75rem;height:.75rem;opacity:.35"></span>
+              <span class="pl-dot" style="right:26%;top:22%;width:.375rem;height:.375rem"></span>
+            </div>
+          </div>
           <!-- legibility scrims -->
-          <div class="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-white/70 to-transparent" aria-hidden="true"></div>
-          <div class="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-white/70 to-transparent" aria-hidden="true"></div>
+          <div class="pointer-events-none absolute inset-x-0 top-0 z-[6] h-40 bg-gradient-to-b from-white/85 to-transparent" aria-hidden="true"></div>
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-56 bg-gradient-to-t from-white/90 to-transparent" aria-hidden="true"></div>
 
           <!-- TOP: label + progress stepper -->
           <div class="scrub-overlay scrub-progress pointer-events-none absolute inset-x-0 top-6 z-10 flex flex-col items-center gap-4 px-4 sm:top-8">
@@ -233,7 +325,7 @@
 
           <!-- BOTTOM: the words travel with the patient as you scroll -->
           <div class="scrub-overlay pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center px-4 sm:bottom-10">
-            <div class="scrub-caption relative h-52 w-full max-w-2xl sm:h-44">
+            <div class="scrub-caption relative h-36 w-full max-w-2xl sm:h-32">
               <div data-step="0" class="scrub-panel absolute inset-0 flex items-center justify-center"><div class="scrub-chip max-w-lg rounded-2xl bg-white/80 px-6 py-4 text-center shadow-xl shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md"><div class="flex items-center justify-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.22em] text-sage-600">01</span><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Discover &amp; access</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-700 sm:text-[0.95rem]">A patient sends a WhatsApp voice note - no app, no portal, no password.</p></div></div>
               <div data-step="1" class="scrub-panel absolute inset-0 flex items-center justify-center" style="opacity:0"><div class="scrub-chip max-w-lg rounded-2xl bg-white/80 px-6 py-4 text-center shadow-xl shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md"><div class="flex items-center justify-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.22em] text-sage-600">02</span><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Triage &amp; guidance</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-700 sm:text-[0.95rem]">The AI understands the request, guides them to the right service and offers to book - safely.</p></div></div>
               <div data-step="2" class="scrub-panel absolute inset-0 flex items-center justify-center" style="opacity:0"><div class="scrub-chip max-w-lg rounded-2xl bg-white/80 px-6 py-4 text-center shadow-xl shadow-navy-900/10 ring-1 ring-white/60 backdrop-blur-md"><div class="flex items-center justify-center gap-2.5"><span class="text-xs font-extrabold tracking-[0.22em] text-sage-600">03</span><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Schedule &amp; prepare</h3></div><p class="mt-1.5 text-sm leading-snug text-navy-700 sm:text-[0.95rem]">It checks real availability, books the slot into your calendar and confirms - all in the chat.</p></div></div>

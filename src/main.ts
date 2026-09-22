@@ -112,65 +112,88 @@ if (form) {
 const year = document.getElementById('year');
 if (year) year.textContent = String(new Date().getFullYear());
 
-/* ---------- Scroll-scrub: patient lifecycle video (home only) ---------- */
+/* ---------- Parallax patient-journey scene (home only) ---------- */
 function initScrub(): void {
   const section = document.querySelector<HTMLElement>('[data-scrub]');
   if (!section) return;
   const track = section.querySelector<HTMLElement>('.scrub-track');
-  const video = section.querySelector<HTMLVideoElement>('[data-scrub-video]');
   const panels = Array.from(section.querySelectorAll<HTMLElement>('[data-step]'));
   const dots = Array.from(section.querySelectorAll<HTMLElement>('[data-step-dot]'));
   const fill = section.querySelector<HTMLElement>('[data-step-fill]');
-  if (!track || !video || panels.length === 0) return;
+  const layers = Array.from(section.querySelectorAll<HTMLElement>('[data-depth]'));
+  const phone = section.querySelector<HTMLElement>('[data-phone]');
+  const screens = Array.from(section.querySelectorAll<HTMLElement>('[data-screen]'));
+  const chips = Array.from(section.querySelectorAll<HTMLElement>('[data-chip]'));
+  if (!track || panels.length === 0) return;
 
-  // Step windows in scroll-progress space, aligned to when each moment appears
-  // in the 9.9s clip: walk/voice, chat "Book", plane+calendar+tick, walk-in,
-  // care-plan screen, home reminder.
-  const bounds = [0, 0.263, 0.374, 0.556, 0.677, 0.808, 1];
+  // Six equal stage windows across the scroll.
   const N = panels.length;
-  const FADE = 0.028;
+  const bounds = Array.from({ length: N + 1 }, (_, i) => i / N);
+  const FADE = 0.03;
 
-  // Reduced motion: don't pin/scrub - loop the clip and stack the captions.
+  // Reduced motion: drop the pin and show the steps as a stacked list.
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     section.classList.add('scrub-off');
-    video.loop = true;
-    video.play().catch(() => {});
     return;
   }
 
-  let duration = 9.9;
-  video.addEventListener('loadedmetadata', () => {
-    duration = video.duration || 9.9;
-    try {
-      video.currentTime = 0.001;
-    } catch {
-      /* ignore */
-    }
-  });
-  // Prime the element so browsers allow frame-accurate seeking without playback.
-  video.play().then(() => video.pause()).catch(() => {});
-
   const ramp = (p: number, lo: number, hi: number) =>
     p <= lo ? 0 : p >= hi ? 1 : (p - lo) / (hi - lo);
+  const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 
-  let curT = -1;
+  // Opacity for stage i: full within its window, cross-fading at the borders.
+  const winOpacity = (i: number, p: number) => {
+    const s = bounds[i];
+    const e = bounds[i + 1];
+    const fin = i === 0 ? 1 : ramp(p, s - FADE, s + FADE);
+    const fout = i === N - 1 ? 1 : 1 - ramp(p, e - FADE, e + FADE);
+    return Math.min(fin, fout);
+  };
+  // Local 0..1 progress through stage i's window.
+  const localT = (i: number, p: number) =>
+    clamp01((p - bounds[i]) / (bounds[i + 1] - bounds[i] || 1));
 
   const apply = (p: number) => {
     let active = 0;
     for (let i = 0; i < N; i++) if (p >= bounds[i]) active = i;
+
+    // Caption words travel with the scroll (rise + alternate drift).
     for (let i = 0; i < N; i++) {
-      const s = bounds[i];
-      const e = bounds[i + 1];
-      const fin = i === 0 ? 1 : ramp(p, s - FADE, s + FADE);
-      const fout = i === N - 1 ? 1 : 1 - ramp(p, e - FADE, e + FADE);
-      panels[i].style.opacity = Math.min(fin, fout).toFixed(3);
-      // The words travel with the scroll: rise through the frame and drift
-      // sideways (alternating) across each step's window.
-      const lt = Math.min(1, Math.max(0, (p - s) / (e - s || 1)));
-      const ty = (0.5 - lt) * 64; // +32px below -> 0 -> -32px above
+      panels[i].style.opacity = winOpacity(i, p).toFixed(3);
+      const lt = localT(i, p);
+      const ty = (0.5 - lt) * 64;
       const tx = (0.5 - lt) * 26 * (i % 2 === 0 ? -1 : 1);
       panels[i].style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0)`;
     }
+
+    // Phone screens morph through the journey (cross-fade + gentle slide).
+    screens.forEach((sc, i) => {
+      sc.style.opacity = winOpacity(i, p).toFixed(3);
+      const ty = (0.5 - localT(i, p)) * 16;
+      sc.style.transform = `translateY(${ty.toFixed(1)}px)`;
+    });
+
+    // Floating stage labels fade with their stage.
+    chips.forEach((c, i) => {
+      c.style.opacity = winOpacity(i, p).toFixed(3);
+    });
+
+    // The phone turns in 3D and floats as you travel.
+    if (phone) {
+      const ry = (p - 0.5) * -26;
+      const rx = 6 - Math.sin(p * Math.PI) * 4;
+      const fy = Math.sin(p * Math.PI * 2) * -5;
+      phone.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(${fy.toFixed(1)}px)`;
+    }
+
+    // Depth parallax: layers pan/drift at rates set by their data-depth.
+    layers.forEach((l) => {
+      const d = parseFloat(l.dataset.depth || '0');
+      const tx = (p - 0.5) * -130 * d;
+      const ty = (p - 0.5) * 34 * d;
+      l.style.transform = `translate3d(${tx.toFixed(1)}px, ${ty.toFixed(1)}px, 0)`;
+    });
+
     dots.forEach((d, i) => {
       d.classList.toggle('is-active', i === active);
       d.classList.toggle('is-done', i < active);
@@ -182,15 +205,6 @@ function initScrub(): void {
     const total = track.offsetHeight - window.innerHeight;
     const p = total > 0 ? Math.min(1, Math.max(0, -track.getBoundingClientRect().top / total)) : 0;
     apply(p);
-    const t = p * duration;
-    if (video.readyState >= 1 && Math.abs(t - curT) > 0.03) {
-      curT = t;
-      try {
-        video.currentTime = t;
-      } catch {
-        /* ignore */
-      }
-    }
   };
 
   addEventListener('scroll', onScroll, { passive: true });
