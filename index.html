@@ -189,41 +189,54 @@
       </div>
     </section>
 
-    <!-- ============ END-TO-END JOURNEY ============ -->
-    <section id="platform" class="scroll-mt-24 bg-white py-20 sm:py-28">
-      <div class="container-site">
-        <div class="mx-auto max-w-3xl text-center reveal">
+    <!-- ============ END-TO-END JOURNEY (scroll-scrub) ============ -->
+    <section id="platform" class="scroll-mt-24 bg-white" data-scrub aria-label="One platform for the entire patient lifecycle">
+      <div class="container-site pt-20 text-center sm:pt-28">
+        <div class="mx-auto max-w-3xl reveal">
           <span class="eyebrow">End-to-end, not point solution</span>
           <h2 class="h2-section">One platform for the <span class="text-sage-600">entire patient lifecycle</span></h2>
           <p class="mt-5 text-lg leading-relaxed text-navy-700">Most tools stop at booking. AnyHealth orchestrates every touchpoint - so patients get the right care, at the right time, in the right place, and keep coming back.</p>
+          <p class="mt-5 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.12em] text-sage-700">
+            Scroll to follow one patient through the journey
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="animate-bounce"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          </p>
         </div>
+      </div>
 
-        <ol class="mx-auto mt-14 grid max-w-6xl gap-x-8 gap-y-2 sm:grid-cols-2 lg:grid-cols-3" aria-label="Patient journey steps">
-          <li class="journey-step relative flex gap-5 py-5 reveal">
-            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-100 text-xl font-extrabold text-sage-700">1</span>
-            <div><h3 class="font-bold text-navy-900">Discover &amp; access</h3><p class="mt-1 text-sm leading-relaxed text-navy-600">Patient reaches out on WhatsApp - text, voice note or a photo of a document. No app, no portal, no password.</p></div>
-          </li>
-          <li class="journey-step relative flex gap-5 py-5 reveal">
-            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-100 text-xl font-extrabold text-sage-700">2</span>
-            <div><h3 class="font-bold text-navy-900">Triage &amp; guidance</h3><p class="mt-1 text-sm leading-relaxed text-navy-600">AI collects symptoms, history and intent, then guides the patient to the right service - with guarded, safe-by-design context.</p></div>
-          </li>
-          <li class="journey-step relative flex gap-5 py-5 reveal">
-            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-100 text-xl font-extrabold text-sage-700">3</span>
-            <div><h3 class="font-bold text-navy-900">Schedule &amp; prepare</h3><p class="mt-1 text-sm leading-relaxed text-navy-600">Checks availability, insurance and clinic policies, books the slot and sends prep instructions automatically.</p></div>
-          </li>
-          <li class="journey-step relative flex gap-5 py-5 reveal">
-            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-100 text-xl font-extrabold text-sage-700">4</span>
-            <div><h3 class="font-bold text-navy-900">Visit &amp; consult</h3><p class="mt-1 text-sm leading-relaxed text-navy-600">Your provider sees the patient summary, history and documents before the visit - better consultations, less admin.</p></div>
-          </li>
-          <li class="journey-step relative flex gap-5 py-5 reveal">
-            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-100 text-xl font-extrabold text-sage-700">5</span>
-            <div><h3 class="font-bold text-navy-900">Care plan &amp; actions</h3><p class="mt-1 text-sm leading-relaxed text-navy-600">Prescriptions, referrals and follow-up tasks turn into clear next steps and actionable reminders for the patient.</p></div>
-          </li>
-          <li class="journey-step relative flex gap-5 py-5 reveal">
-            <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-100 text-xl font-extrabold text-sage-700">6</span>
-            <div><h3 class="font-bold text-navy-900">Follow-up &amp; outcomes</h3><p class="mt-1 text-sm leading-relaxed text-navy-600">Medication adherence, recovery check-ins, PROM collection and remote monitoring - care continues long after the visit.</p></div>
-          </li>
-        </ol>
+      <div class="scrub-track relative">
+        <div class="scrub-stage flex items-center">
+          <div class="container-site w-full">
+            <!-- progress stepper -->
+            <div class="relative mx-auto max-w-3xl px-1">
+              <div class="absolute left-[1.15rem] right-[1.15rem] top-[1.1rem] h-[3px] rounded-full bg-navy-100" aria-hidden="true"></div>
+              <div data-step-fill class="absolute left-[1.15rem] right-[1.15rem] top-[1.1rem] h-[3px] origin-left rounded-full bg-sage-500" style="transform:scaleX(0)" aria-hidden="true"></div>
+              <ol data-steps class="relative flex items-start justify-between" aria-hidden="true">
+                <li data-step-dot="0" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">1</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Discover</span></li>
+                <li data-step-dot="1" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">2</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Triage</span></li>
+                <li data-step-dot="2" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">3</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Schedule</span></li>
+                <li data-step-dot="3" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">4</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Visit</span></li>
+                <li data-step-dot="4" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">5</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Care plan</span></li>
+                <li data-step-dot="5" class="flex flex-col items-center gap-2"><span class="step-num flex h-9 w-9 items-center justify-center rounded-full text-sm font-extrabold">6</span><span class="step-label hidden text-center text-[0.68rem] font-bold leading-tight sm:block">Outcomes</span></li>
+              </ol>
+            </div>
+
+            <!-- scroll-driven video -->
+            <video data-scrub-video class="mx-auto mt-7 block max-h-[54vh] w-full max-w-4xl rounded-[1.6rem] bg-[#f4ece6] object-contain shadow-2xl shadow-navy-900/10 ring-1 ring-navy-900/5"
+                   muted playsinline preload="auto" poster="/assets/lifecycle-scroll-poster.webp" aria-hidden="true">
+              <source src="/assets/lifecycle-scroll.mp4" type="video/mp4" />
+            </video>
+
+            <!-- swapping caption -->
+            <div class="scrub-caption relative mx-auto mt-6 h-24 max-w-2xl sm:h-[5.5rem]">
+              <div data-step="0" class="scrub-panel absolute inset-0 px-4 text-center"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Discover &amp; access</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">A patient reaches out on WhatsApp with a voice note - no app, no portal, no password.</p></div>
+              <div data-step="1" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Triage &amp; guidance</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">The AI understands the request and guides them to the right service - then offers to book, safely.</p></div>
+              <div data-step="2" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Schedule &amp; prepare</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">It checks real availability, books the slot into your calendar and confirms - all in the chat.</p></div>
+              <div data-step="3" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Visit &amp; consult</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">The patient arrives and your provider sees the full summary, history and documents - ready.</p></div>
+              <div data-step="4" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Care plan &amp; actions</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">Prescriptions, check-ins and follow-up tasks turn into clear, tracked next steps for the patient.</p></div>
+              <div data-step="5" class="scrub-panel absolute inset-0 px-4 text-center" style="opacity:0"><h3 class="text-xl font-extrabold text-navy-900 sm:text-2xl">Follow-up &amp; outcomes</h3><p class="mx-auto mt-1.5 max-w-xl text-sm leading-relaxed text-navy-600 sm:text-base">Medication reminders and recovery check-ins keep patients on track - long after the visit.</p></div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -252,10 +265,7 @@
           </div>
         </div>
         <div class="reveal">
-          <div class="mx-auto grid max-w-2xl grid-cols-2 items-center gap-2 sm:gap-4">
-            <img src="/assets/frontdesk1.webp" alt="AnyHealth WhatsApp AI turning a patient voice message into an accurate clinic booking, with a full appointment summary" class="w-full drop-shadow-2xl" width="1200" height="1500" loading="lazy" />
-            <img src="/assets/frontdesk2.webp" alt="AnyHealth WhatsApp assistant sharing health check-up packages and prices and finding the nearest clinic branch by location" class="w-full drop-shadow-2xl" width="1200" height="1500" loading="lazy" />
-          </div>
+          <img src="/assets/booking-promo.webp" alt="AnyHealth WhatsApp assistant turning a patient voice message into an accurate clinic appointment - the booking confirmed and summarised in the chat, with voice messages supported for easy, accurate bookings" class="mx-auto w-full max-w-xl drop-shadow-2xl lg:max-w-none" width="1200" height="1500" loading="lazy" />
         </div>
       </div>
     </section>

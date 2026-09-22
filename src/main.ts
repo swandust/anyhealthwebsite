@@ -112,6 +112,87 @@ if (form) {
 const year = document.getElementById('year');
 if (year) year.textContent = String(new Date().getFullYear());
 
+/* ---------- Scroll-scrub: patient lifecycle video (home only) ---------- */
+function initScrub(): void {
+  const section = document.querySelector<HTMLElement>('[data-scrub]');
+  if (!section) return;
+  const track = section.querySelector<HTMLElement>('.scrub-track');
+  const video = section.querySelector<HTMLVideoElement>('[data-scrub-video]');
+  const panels = Array.from(section.querySelectorAll<HTMLElement>('[data-step]'));
+  const dots = Array.from(section.querySelectorAll<HTMLElement>('[data-step-dot]'));
+  const fill = section.querySelector<HTMLElement>('[data-step-fill]');
+  if (!track || !video || panels.length === 0) return;
+
+  // Step windows in scroll-progress space, aligned to when each moment appears
+  // in the 9.9s clip: walk/voice, chat "Book", plane+calendar+tick, walk-in,
+  // care-plan screen, home reminder.
+  const bounds = [0, 0.263, 0.374, 0.556, 0.677, 0.808, 1];
+  const N = panels.length;
+  const FADE = 0.028;
+
+  // Reduced motion: don't pin/scrub - loop the clip and stack the captions.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    section.classList.add('scrub-off');
+    video.loop = true;
+    video.play().catch(() => {});
+    return;
+  }
+
+  let duration = 9.9;
+  video.addEventListener('loadedmetadata', () => {
+    duration = video.duration || 9.9;
+    try {
+      video.currentTime = 0.001;
+    } catch {
+      /* ignore */
+    }
+  });
+  // Prime the element so browsers allow frame-accurate seeking without playback.
+  video.play().then(() => video.pause()).catch(() => {});
+
+  const ramp = (p: number, lo: number, hi: number) =>
+    p <= lo ? 0 : p >= hi ? 1 : (p - lo) / (hi - lo);
+
+  let curT = -1;
+
+  const apply = (p: number) => {
+    let active = 0;
+    for (let i = 0; i < N; i++) if (p >= bounds[i]) active = i;
+    for (let i = 0; i < N; i++) {
+      const s = bounds[i];
+      const e = bounds[i + 1];
+      const fin = i === 0 ? 1 : ramp(p, s - FADE, s + FADE);
+      const fout = i === N - 1 ? 1 : 1 - ramp(p, e - FADE, e + FADE);
+      panels[i].style.opacity = Math.min(fin, fout).toFixed(3);
+    }
+    dots.forEach((d, i) => {
+      d.classList.toggle('is-active', i === active);
+      d.classList.toggle('is-done', i < active);
+    });
+    if (fill) fill.style.transform = `scaleX(${p.toFixed(4)})`;
+  };
+
+  const onScroll = () => {
+    const total = track.offsetHeight - window.innerHeight;
+    const p = total > 0 ? Math.min(1, Math.max(0, -track.getBoundingClientRect().top / total)) : 0;
+    apply(p);
+    const t = p * duration;
+    if (video.readyState >= 1 && Math.abs(t - curT) > 0.03) {
+      curT = t;
+      try {
+        video.currentTime = t;
+      } catch {
+        /* ignore */
+      }
+    }
+  };
+
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  onScroll();
+}
+initScrub();
+
 /* ---------- Hero (home page only) ---------- */
 initHero();
 

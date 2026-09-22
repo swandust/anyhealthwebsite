@@ -278,3 +278,75 @@ details.faq[open] .faq-icon {
 #site-header.is-stuck {
   @apply bg-white/90 shadow-lg shadow-navy-900/5 backdrop-blur-xl;
 }
+
+/* ---------- Scroll-scrub: patient lifecycle ---------- */
+.scrub-track {
+  height: 560vh;
+}
+@media (max-width: 640px) {
+  .scrub-track {
+    height: 460vh;
+  }
+}
+.scrub-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+}
+.scrub-panel {
+  transition: opacity 0.35s ease;
+  will-change: opacity;
+}
+[data-step-fill] {
+  transition: transform 0.15s linear;
+}
+
+/* Progress stepper */
+[data-step-dot] .step-num {
+  @apply bg-navy-100 text-navy-400;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+[data-step-dot] .step-label {
+  @apply text-navy-400;
+  transition: color 0.3s ease;
+}
+[data-step-dot].is-done .step-num {
+  @apply bg-sage-100 text-sage-600;
+}
+[data-step-dot].is-active .step-num {
+  @apply bg-sage-600 text-white shadow-lg shadow-sage-600/30;
+  transform: scale(1.12);
+}
+[data-step-dot].is-active .step-label {
+  @apply text-sage-700;
+}
+
+/* Fallback when scrubbing is disabled (reduced motion) */
+.scrub-off .scrub-track {
+  height: auto;
+}
+.scrub-off .scrub-stage {
+  position: static;
+  height: auto;
+  display: block;
+  padding-block: 2.5rem;
+}
+.scrub-off [data-scrub-video] {
+  max-height: none;
+}
+.scrub-off .scrub-caption {
+  height: auto;
+}
+.scrub-off [data-step] {
+  position: static !important;
+  opacity: 1 !important;
+  margin-top: 1.75rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-step-dot] .step-num,
+  [data-step-dot] .step-label,
+  .scrub-panel {
+    transition: none;
+  }
+}
