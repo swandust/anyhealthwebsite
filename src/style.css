@@ -301,25 +301,20 @@ details.faq[open] .faq-icon {
 [data-step-fill] {
   transition: transform 0.15s linear;
 }
-/* ---------- Cinematic scene layers (camera flies through the journey) ---------- */
-.cine-layer {
+/* ---------- Scroll-scrubbed scene canvas (image sequence) ---------- */
+.cine-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  display: block;
   background: #0b1329;
-  transform-origin: center center;
-  transition: opacity 0.14s linear, filter 0.2s linear;
-  will-change: transform, opacity;
 }
 .cine-cap {
   transition: opacity 0.35s ease;
   will-change: opacity;
 }
 @media (prefers-reduced-motion: reduce) {
-  .cine-layer,
   .cine-cap {
     transition: none;
   }
@@ -353,13 +348,6 @@ details.faq[open] .faq-icon {
 .scrub-off .scrub-stage {
   position: relative;
   height: 62vh;
-}
-.scrub-off .cine-layer {
-  transform: none !important;
-  opacity: 0 !important;
-}
-.scrub-off [data-cine='0'] {
-  opacity: 1 !important;
 }
 .scrub-off .scrub-progress {
   display: none;

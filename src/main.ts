@@ -112,100 +112,173 @@ if (form) {
 const year = document.getElementById('year');
 if (year) year.textContent = String(new Date().getFullYear());
 
-/* ---------- Cinematic patient-journey (home only) ----------
-   Six full-HD scene clips play full-screen and cross-fade (blend) into each
-   other as you scroll, with a slow camera push on each. Captions sit in each
-   scene's empty space. Works the same on laptop and iPhone. */
+/* ---------- Scroll-scrubbed patient journey (home only) ----------
+   Six scenes are pre-rendered to image sequences and scrubbed on a <canvas>:
+   scroll position is the timeline (scroll = frames advance, stop = freeze),
+   with a dissolve between scenes and a slow camera push. Runs identically on
+   laptop and iPhone (no video-seek jank). rAF lerp smooths the scrub. */
 function initScrub(): void {
   const section = document.querySelector<HTMLElement>('[data-scrub]');
   if (!section) return;
   const track = section.querySelector<HTMLElement>('.scrub-track');
-  const vids = Array.from(section.querySelectorAll<HTMLVideoElement>('[data-cine]'));
+  const canvas = section.querySelector<HTMLCanvasElement>('[data-cine-canvas]');
   const caps = Array.from(section.querySelectorAll<HTMLElement>('[data-cap]'));
   const dots = Array.from(section.querySelectorAll<HTMLElement>('[data-step-dot]'));
   const fill = section.querySelector<HTMLElement>('[data-step-fill]');
-  if (!track || vids.length === 0) return;
+  if (!track || !canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
-  const N = vids.length; // 6
-  const bounds = Array.from({ length: N + 1 }, (_, i) => i / N);
-  const FADE = 0.055; // half-width of each cross-fade blend
-
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    section.classList.add('scrub-off');
-    vids.forEach((v, i) => {
-      v.style.transform = 'none';
-      if (i === 0) v.play().catch(() => {});
-      else v.pause();
-    });
-    return;
-  }
-
+  const N = 6;
+  const FRAMES = 28;
+  const BLEND = 0.16; // fraction of each scene window spent dissolving into the next
   const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
-  const ramp = (p: number, lo: number, hi: number) => (p <= lo ? 0 : p >= hi ? 1 : (p - lo) / (hi - lo));
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Scene i is fully opaque within its window and cross-fades at the borders.
-  const sceneOpacity = (i: number, p: number) => {
-    const fin = i === 0 ? 1 : ramp(p, bounds[i] - FADE, bounds[i] + FADE);
-    const fout = i === N - 1 ? 1 : 1 - ramp(p, bounds[i + 1] - FADE, bounds[i + 1] + FADE);
-    return Math.min(fin, fout);
+  // scrub state (declared early: the image onload handler reads them)
+  let targetP = 0;
+  let curP = 0;
+  let running = false;
+
+  // ----- preload the image sequences (scene 1 first, then stagger the rest) -----
+  const imgs: HTMLImageElement[][] = [];
+  const loadScene = (s: number) => {
+    imgs[s] = [];
+    for (let f = 0; f < FRAMES; f++) {
+      const im = new Image();
+      im.decoding = 'async';
+      im.onload = () => {
+        if (!running) draw(curP);
+      };
+      im.src = `/assets/seq/s${s + 1}/${String(f + 1).padStart(2, '0')}.webp`;
+      imgs[s][f] = im;
+    }
   };
-  const localT = (i: number, p: number) => clamp01((p - bounds[i]) / (bounds[i + 1] - bounds[i] || 1));
-  // Caption trapezoid: fades in just after a scene arrives, out just before it leaves.
+  loadScene(0);
+  let toLoad = 1;
+  const loadNext = () => {
+    if (toLoad < N) {
+      loadScene(toLoad++);
+      setTimeout(loadNext, 120);
+    }
+  };
+  setTimeout(loadNext, 80);
+
+  // nearest already-decoded frame, so an un-loaded frame degrades gracefully
+  const frameOf = (s: number, f: number): HTMLImageElement | null => {
+    const arr = imgs[s];
+    if (!arr) return null;
+    const ok = (im?: HTMLImageElement) => (im && im.complete && im.naturalWidth > 0 ? im : null);
+    if (ok(arr[f])) return arr[f];
+    for (let d = 1; d < FRAMES; d++) {
+      if (ok(arr[f - d])) return arr[f - d];
+      if (ok(arr[f + d])) return arr[f + d];
+    }
+    return null;
+  };
+
+  // ----- canvas sizing (device-pixel-ratio aware, self-correcting) -----
+  let W = 0;
+  let H = 0;
+  const ensureSize = () => {
+    const cw = canvas.clientWidth;
+    const ch = canvas.clientHeight;
+    if (cw && ch && (cw !== W || ch !== H || canvas.width === 0)) {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = cw;
+      H = ch;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+  };
+
+  const drawCover = (img: HTMLImageElement, alpha: number, push: number) => {
+    const scale = Math.max(W / img.naturalWidth, H / img.naturalHeight) * push;
+    const dw = img.naturalWidth * scale;
+    const dh = img.naturalHeight * scale;
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    ctx.globalAlpha = 1;
+  };
+
+  // caption visible during a scene's hold (fractions are within-scene 0..1,
+  // fading out before the dissolve to the next scene begins at 1 - BLEND)
   const captionOpacity = (i: number, p: number) => {
-    const s = i === 0 ? 0 : bounds[i] + 0.02;
-    const sf = bounds[i] + 0.055;
-    const eh = bounds[i + 1] - 0.055;
-    const e = i === N - 1 ? 1 : bounds[i + 1] - 0.02;
-    if (p <= s || p >= e) return 0;
-    if (p < sf) return clamp01((p - s) / (sf - s || 1));
-    if (p > eh) return clamp01((e - p) / (e - eh || 1));
+    const within = (clamp01(p) - i / N) * N;
+    if (within < 0 || within > 1.0001) return 0;
+    const inA = 0.08;
+    const inB = 0.2;
+    const last = i === N - 1;
+    const outA = last ? 1.01 : 1 - BLEND - 0.06;
+    const outB = last ? 1.01 : 1 - BLEND - 0.01;
+    if (within <= inA || within >= outB) return 0;
+    if (within < inB) return clamp01((within - inA) / (inB - inA));
+    if (within > outA) return clamp01((outB - within) / (outB - outA || 1));
     return 1;
   };
 
-  const apply = (p: number) => {
-    vids.forEach((v, i) => {
-      const o = sceneOpacity(i, p);
-      v.style.opacity = o.toFixed(3);
-      const push = 1 + 0.09 * localT(i, p); // slow camera push, keeps full-bleed (>=1)
-      v.style.transform = `scale(${push.toFixed(3)})`;
-      // Play a scene once when you scroll into it; it then holds on its last
-      // frame (no loop). Scroll back in and it replays from the start.
-      const visible = o > 0.02;
-      const wasVisible = v.dataset.vis === '1';
-      if (visible && !wasVisible) {
-        v.dataset.vis = '1';
-        try {
-          v.currentTime = 0;
-        } catch {
-          /* ignore */
-        }
-        v.play().catch(() => {});
-      } else if (!visible && wasVisible) {
-        v.dataset.vis = '0';
-        v.pause();
-      }
-    });
+  const draw = (p: number) => {
+    ensureSize();
+    if (!W || !H) return;
+    ctx.fillStyle = '#0b1329';
+    ctx.fillRect(0, 0, W, H);
+
+    const pos = clamp01(p) * N;
+    const base = Math.min(N - 1, Math.floor(pos));
+    const within = pos - base; // 0..1 across the current scene
+    const baseImg = frameOf(base, Math.round(within * (FRAMES - 1)));
+    if (baseImg) drawCover(baseImg, 1, 1 + 0.08 * within);
+
+    // dissolve the next scene in over the last BLEND of this scene
+    if (base < N - 1 && within > 1 - BLEND) {
+      const t = (within - (1 - BLEND)) / BLEND;
+      const nextImg = frameOf(base + 1, 0);
+      if (nextImg) drawCover(nextImg, clamp01(t), 1);
+    }
 
     caps.forEach((c, i) => (c.style.opacity = captionOpacity(i, p).toFixed(3)));
-
-    let active = 0;
-    for (let i = 0; i < N; i++) if (p >= bounds[i]) active = i;
+    const active = Math.min(N - 1, Math.floor(clamp01(p) * N));
     dots.forEach((d, i) => {
       d.classList.toggle('is-active', i === active);
       d.classList.toggle('is-done', i < active);
     });
-    if (fill) fill.style.transform = `scaleX(${p.toFixed(4)})`;
+    if (fill) fill.style.transform = `scaleX(${clamp01(p).toFixed(4)})`;
   };
 
+  if (import.meta.env.DEV) (window as unknown as { __cineDraw?: (p: number) => void }).__cineDraw = draw;
+
+  if (reduced) {
+    section.classList.add('scrub-off');
+    addEventListener('resize', () => draw(0));
+    draw(0);
+    return;
+  }
+
+  // ----- rAF-smoothed scrub -----
+  const tick = () => {
+    curP += (targetP - curP) * 0.2;
+    if (Math.abs(targetP - curP) < 0.0004) curP = targetP;
+    draw(curP);
+    if (curP !== targetP) requestAnimationFrame(tick);
+    else running = false;
+  };
+  const ensure = () => {
+    if (!running) {
+      running = true;
+      requestAnimationFrame(tick);
+    }
+  };
   const onScroll = () => {
     const total = track.offsetHeight - window.innerHeight;
-    const p = total > 0 ? Math.min(1, Math.max(0, -track.getBoundingClientRect().top / total)) : 0;
-    apply(p);
+    targetP = total > 0 ? clamp01(-track.getBoundingClientRect().top / total) : 0;
+    ensure();
   };
 
   addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', onScroll);
+  addEventListener('resize', () => draw(curP));
   onScroll();
+  draw(0);
 }
 initScrub();
 
